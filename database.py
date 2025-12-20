@@ -65,6 +65,34 @@ def add_employee_db(id, fname, sname, start_date):
 
 
 
+# def search():
+# 				# Get search name
+# 				english_name = ename_entry.get()
+# 				ename_entry.delete(0, END)
+
+# 				# Get matching results
+# 				search_results = pay.search_employees(english_name)
+
+# 				# Loop through and select right result
+# 				for x in search_results:
+# 					response = messagebox.askyesno('Employee Information', f'{x} : Is this the right employee?')
+
+# 					if response == 1:
+# 						ename_entry.insert(0, x[0])
+# 						fname_entry.insert(0, x[1])
+# 						sname_entry.insert(0, x[2])
+# 						id_entry.insert(0, x[3])
+# 						break
+
+
+# c.execute(f"""SELECT englishName,
+# 						fullName,
+# 						Surname,
+# 						idPass
+# 					FROM
+# 						employeeNames
+# 					WHERE
+# 						englishName LIKE '%{search}%'""")
 
 
 # MAKE INSERT AND COLLECT FUNCTIONS

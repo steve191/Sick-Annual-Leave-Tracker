@@ -49,6 +49,9 @@ def add_employee():
 	save_button = Button(top, text="Save", command=save)
 	save_button.grid(row=4, column=0, columnspan=4, sticky=NSEW, padx=10, pady=10)
 
+def update_employee():
+	pass
+
 
 # ##############################################################################################
 # WIDGETS
@@ -58,6 +61,7 @@ def add_employee():
 setup_label = Label(root, text='EMPLOYEE SETUP',borderwidth=1, relief='solid')
 
 add_employee_button = Button(root, text='Add Employee', width=12, command=add_employee)
+update_employee_button = Button(root, text='Add Employee', width=12, command=update_employee)
 
 # ##############################################################################################
 # BIND WIDGETS
@@ -67,6 +71,7 @@ add_employee_button = Button(root, text='Add Employee', width=12, command=add_em
 setup_label.grid(row=0, column=0, columnspan=4 ,sticky=W+E, padx=(5,5), pady=(0,10))
 
 add_employee_button.grid(row=1, column=0, padx=(5,10))
+update_employee_button.grid(row=1, column=1, padx=(5,10))
 # setup_button2.grid(row=1, column=1, padx=(0,10))
 # setup_button3.grid(row=1, column=2, padx=(0,10))
 # setup_button4.grid(row=1, column=3, padx=(0,5))
