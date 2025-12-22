@@ -1,5 +1,7 @@
 import sqlite3
 import os
+from datetime import datetime
+from dateutil import parser
 from tkinter import messagebox
 
 # ##############################################################################################
@@ -56,7 +58,7 @@ def collect_data(table):
 	except Exception as error:
 		messagebox.showerror(title='Add Employee Error', message=error)
 
-def add_employee_db(id, fname, sname, start_date):
+def add_employee_db(id, fname, sname, start):
 	try:
 		con = sqlite3.connect("employeeLeave.db")
 		c = con.cursor()
@@ -64,13 +66,20 @@ def add_employee_db(id, fname, sname, start_date):
 		# Turn on foreign keys
 		c.execute('PRAGMA foreign_keys = ON')
 
-		c.execute("INSERT INTO employees VALUES (:id, :firstName, :lastName, :startDate)",
+		# Check to see if not empty strings
+		if id != '' or fname != '' or sname != '' or start != '':
+
+			start_date = str(parser.parse(start).strftime('%d/%m/%Y'))
+
+			c.execute("INSERT INTO employees VALUES (:id, :firstName, :lastName, :startDate)",
 						{
 							'id' : id,
 							'firstName' : fname,
 							'lastName' : sname,
 							'startDate' : start_date
 						})
+		else:
+			raise Exception("All Information Must Be Filled Out!")
 		
 		con.commit()
 		con.close()

@@ -41,6 +41,9 @@ def add_employee():
 		id_entry.delete(0, END)
 		fname_entry.delete(0, END)
 		sname_entry.delete(0, END)
+
+		# Close Window
+		top.destroy()
 	
 	save_button = Button(top, text="Save", command=save)
 	save_button.grid(row=4, column=0, columnspan=4, sticky=NSEW, padx=10, pady=10)

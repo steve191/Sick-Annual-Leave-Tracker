@@ -1,15 +1,15 @@
 from tkinter import *
 from tkinter import ttk
 import employee_setup as setup
-from database import collect_data
+import database as db
 
 root = Tk()
 
 # Add our data to the screen
 def builder():
-	records = collect_data('employees')
-		
-	# my_tree.delete(*my_tree.get_children())
+	records = db.collect_data('employees')
+
+	my_tree.delete(*my_tree.get_children())
 
 	global count
 	count = 0
@@ -81,6 +81,25 @@ my_tree.tag_configure('evenrow', background="lightblue")
 # FUNCTIONS
 # ##############################################################################################
 
+def add_employee():
+	# SORT OUT DATE FORMATE
+	id = id_entry.get().upper()
+	fname = first_entry.get().capitalize()
+	sname = last_entry.get().capitalize()
+	start = start_entry.get()
+
+	# # Save to database
+	db.add_employee_db(id, fname, sname, start)
+
+	# Clear entry boxes
+	id_entry.delete(0, END)
+	first_entry.delete(0, END)
+	last_entry.delete(0, END)
+	start_entry.delete(0, END)
+
+	# Refresh
+	builder()
+
 # Select Record
 def select_record(e):
 	# Clear entry boxes
@@ -113,7 +132,7 @@ data_frame.pack(fill="x", expand="yes", padx=20)
 
 id_label = Label(data_frame, text="ID")
 id_label.grid(row=0, column=0, padx=10, pady=10)
-id_entry = Entry(data_frame, state='readonly')
+id_entry = Entry(data_frame)
 id_entry.grid(row=0, column=1, padx=10, pady=10)
 
 first_label = Label(data_frame, text="First Name")
@@ -135,7 +154,7 @@ start_entry.grid(row=0, column=7, padx=10, pady=10)
 setup_frame = LabelFrame(root, text="Setup Employees")
 setup_frame.pack(fill="x", expand="yes", padx=20)
 
-add_employee_button = Button(setup_frame, text='Add Employee', width=12, command=setup.add_employee)
+add_employee_button = Button(setup_frame, text='Add Employee', width=12, command=add_employee)
 add_employee_button.grid(row=1, column=0, padx=10, pady=10)
 update_employee_button = Button(setup_frame, text='Update Employee', width=12, command=setup.update_employee)
 update_employee_button.grid(row=1, column=1, padx=10, pady=10)
