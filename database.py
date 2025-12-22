@@ -103,6 +103,30 @@ def update_employee_db(id, fname, sname, start_date):
 	except Exception as error:
 		messagebox.showerror(title='Update Employee Error', message=error)
 
+# Update employee in database
+def delete_employee_db(id):
+	try:
+		con = sqlite3.connect("employeeLeave.db")
+		c = con.cursor()
+
+		# Turn on foreign keys
+		c.execute('PRAGMA foreign_keys = ON')
+
+		c.execute("DELETE FROM employees WHERE id = :id",
+						{
+							'id' : id
+						})
+		
+		con.commit()
+		con.close()
+		
+		# Display complete
+		messagebox.showinfo(title='Delete Employee', message='Deleted Employee Successfully')
+
+	except Exception as error:
+		messagebox.showerror(title='Delete Employee Error', message=error)
+
+
 # ##############################################################################################
 # DATABSE FUNCTIONS
 # ##############################################################################################

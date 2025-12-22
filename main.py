@@ -94,7 +94,7 @@ def add_employee():
 	sname = last_entry.get().capitalize()
 	start = start_entry.get()
 
-	# # Save to database
+	# Save to database
 	db.add_employee_db(id, fname, sname, start)
 
 	# Clear entry boxes
@@ -112,7 +112,24 @@ def update_employee():
 	sname = last_entry.get().capitalize()
 	start = start_entry.get()
 
+	# Update in database
 	db.update_employee_db(id, fname, sname, start)
+
+	# Clear entry boxes
+	id_entry.config(state='normal')
+	id_entry.delete(0, END)
+	first_entry.delete(0, END)
+	last_entry.delete(0, END)
+	start_entry.delete(0, END)
+
+	# Refresh
+	builder()
+
+def delete_employee():
+	id = id_entry.get()
+
+	# Delete in database
+	db.delete_employee_db(id)
 
 	# Clear entry boxes
 	id_entry.config(state='normal')
@@ -186,6 +203,9 @@ add_employee_button.grid(row=0, column=1, padx=10, pady=10)
 
 update_employee_button = Button(setup_frame, text='Update Employee', width=15, command=update_employee)
 update_employee_button.grid(row=0, column=2, padx=10, pady=10)
+
+delete_employee_button = Button(setup_frame, text='Delete Employee', width=15, command=delete_employee)
+delete_employee_button.grid(row=0, column=3, padx=10, pady=10)
 
 # Bind the treeview
 my_tree.bind("<ButtonRelease-1>", select_record)
