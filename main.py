@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter import ttk
 import database as db
+from annual_leave import add_annual_leave
 
 root = Tk()
 
@@ -82,6 +83,9 @@ my_tree.tag_configure('evenrow', background="lightblue")
 # FUNCTIONS
 # ##############################################################################################
 
+	# ###############
+	# EMPLOYEE SETUP
+	# ###############
 def clear_input():
 	id_entry.config(state="normal")
 	id_entry.delete(0, END)
@@ -164,7 +168,20 @@ def select_record(e):
 	first_entry.insert(0, values[1])
 	last_entry.insert(0, values[2])
 	start_entry.insert(0, values[3])
+
+	# ###############
+	# LEAVE
+	# ###############
+def annual_leave():
+	id = id_entry.get()
+	fname = first_entry.get()
+	sname = last_entry.get()
 	
+	# Send data to add annual leave
+	add_annual_leave(id, fname, sname)
+
+
+
 # ##############################################################################################
 # WIDGETS
 # ##############################################################################################
@@ -209,13 +226,20 @@ update_employee_button.grid(row=0, column=2, padx=10, pady=10)
 delete_employee_button = Button(setup_frame, text='Delete Employee', width=15, command=delete_employee)
 delete_employee_button.grid(row=0, column=3, padx=10, pady=10)
 
+# Leave Frame
+leave_frame = LabelFrame(root, text="Leave")
+leave_frame.pack(fill="x", expand="no", padx=20, pady=(20,0))
+
+add_annual_button = Button(leave_frame, text='Add Annual Leave Taken', width=19, command=annual_leave)
+add_annual_button.grid(row=0, column=0, padx=10, pady=10)
+
 # Bind the treeview
 my_tree.bind("<ButtonRelease-1>", select_record)
 
 # ROOT WINDOW CONFIG
 root.title('Annual / Sick Leave')
 # root.iconbitmap('icons/smoking.ico')
-root.geometry("1000x500")
+root.geometry("1000x550")
 # root.columnconfigure(0, weight=1)
 
 # RUN BUILDER

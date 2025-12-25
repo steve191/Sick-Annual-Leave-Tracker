@@ -156,3 +156,7 @@ def collect_data_tree():
 	
 	except Exception as error:
 		messagebox.showerror(title='Add Employee Error', message=error)
+
+# Add employee annual leave
+def add_annual_leave_db():
+	pass
