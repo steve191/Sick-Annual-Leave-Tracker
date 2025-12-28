@@ -95,7 +95,7 @@ def collect_data_tree():
 			# print(emp_info)
 			empolyee_info.append(emp_info)
 
-			return empolyee_info
+		return empolyee_info
 		
 	except Exception as error:
 		messagebox.showerror(title='Add Employee Error', message=error)
