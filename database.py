@@ -28,9 +28,10 @@ if not os.path.exists('employeeLeave.db'):
 
 	c.execute('''CREATE TABLE IF NOT EXISTS annualLeave (
 			ID TEXT,
+		    firstName Text,
 			leaveTaken INTEGER,
 			leaveStart TEXT,
-			LeaveEnd TEXT,
+			leaveEnd TEXT,
 			FOREIGN KEY (ID) REFERENCES employees (ID)
 			)'''
 		)
@@ -88,7 +89,7 @@ def collect_data_tree():
 			# Get leave days already taken
 			for leave in leave_taken:
 				if rec[0] == leave[0]:
-					leave_days -= leave[1]
+					leave_days -= leave[2]
 
 			# Add leave days to eployee data
 			emp_info = rec + [leave_days]
@@ -96,6 +97,25 @@ def collect_data_tree():
 			empolyee_info.append(emp_info)
 
 		return empolyee_info
+		
+	except Exception as error:
+		messagebox.showerror(title='Add Employee Error', message=error)
+
+def collect_data_leave_tree():		
+	try:
+		con = sqlite3.connect("employeeLeave.db")
+		c = con.cursor()
+
+		# Turn on foreign keys
+		c.execute('PRAGMA foreign_keys = ON')
+
+		c.execute(f"SELECT * FROM annualLeave ORDER BY ID ASC")
+		records = c.fetchall()
+		
+		con.commit()
+		con.close()
+		
+		return records
 		
 	except Exception as error:
 		messagebox.showerror(title='Add Employee Error', message=error)
@@ -196,12 +216,6 @@ def delete_employee_db(id):
 # DATABSE FUNCTIONS
 # ##############################################################################################
 
-
-
-# ##################
-# WORKING
-# ##################
-
 # Add employee annual leave
 def add_annual_leave_db(id, fname, sname):
 	if id == '':
@@ -277,9 +291,10 @@ def add_annual_leave_db(id, fname, sname):
 					response = messagebox.askyesno(title='Add Employee Annual Leave', message='Some Employee Info Blank. Is This OK?')
 					
 					if response == 1:
-						c.execute("INSERT INTO annualLeave VALUES (:id, :leaveTaken, :leaveStart, :leaveEnd)",
+						c.execute("INSERT INTO annualLeave VALUES (:id, :firstName, :leaveTaken, :leaveStart, :leaveEnd)",
 								{
 									'id' : id,
+									'firstName' : fname,
 									'leaveTaken' : leave_days,
 									'leaveStart' : start_leave,
 									'leaveEnd' : end_leave
@@ -291,9 +306,10 @@ def add_annual_leave_db(id, fname, sname):
 						# Close window
 						top.destroy()
 				else:
-					c.execute("INSERT INTO annualLeave VALUES (:id, :leaveTaken, :leaveStart, :leaveEnd)",
+					c.execute("INSERT INTO annualLeave VALUES (:id, :firstName, :leaveTaken, :leaveStart, :leaveEnd)",
 								{
 									'id' : id,
+									'firstName' : fname,
 									'leaveTaken' : leave_days,
 									'leaveStart' : start_leave,
 									'leaveEnd' : end_leave
@@ -304,11 +320,52 @@ def add_annual_leave_db(id, fname, sname):
 
 					# Close window
 					top.destroy()
+					
 				con.commit()
 				con.close()
 				
 			except Exception as error:
 				messagebox.showerror(title='Add Employee Annual Leave', message=error)
-
+			
 		save_button = Button(top, text="Save", command=save)
 		save_button.grid(row=6, column=0, columnspan=2, sticky=NSEW, padx=10, pady=10)
+
+		return top
+	
+# Edit Leave
+def update_leave_db(top, id, days, start_date, end_date):
+	try:
+		if days == '' or start_date == '' or end_date == '':
+			raise Exception("Information Empty!")
+		else:
+			response = messagebox.askyesno(title='Update Leave', message='Are You Sure You Want To Update Leave Infomation', 
+			parent=top)
+
+			if response == 1:
+				con = sqlite3.connect("employeeLeave.db")
+				c = con.cursor()
+
+				# Turn on foreign keys
+				c.execute('PRAGMA foreign_keys = ON')
+
+				c.execute('''UPDATE annualLeave SET
+								leaveTaken = :leaveTaken,
+								leaveStart = :leaveStart,
+								leaveEnd = :leaveEnd
+					
+								WHERE id = :id''',
+								{
+									'id' : id,
+									'leaveTaken' : days,
+									'leaveStart' : start_date,
+									'leaveEnd' : end_date
+								})
+				
+				con.commit()
+				con.close()
+				
+				# Display complete
+				messagebox.showinfo(title='Update Leave', message='Updated Employee Leave Successfully', parent=top)
+
+	except Exception as error:
+		messagebox.showerror(title='Update Leave Error', message=error, parent=top)

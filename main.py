@@ -1,6 +1,7 @@
+import database as db
+import leave
 from tkinter import *
 from tkinter import ttk
-import database as db
 
 
 root = Tk()
@@ -8,8 +9,6 @@ root = Tk()
 # Add our data to the screen
 def builder():
 	records = db.collect_data_tree()
-
-	my_tree.delete(*my_tree.get_children())
 
 	global count
 	count = 0
@@ -110,6 +109,7 @@ def add_employee():
 	start_entry.delete(0, END)
 
 	# Refresh
+	my_tree.delete(*my_tree.get_children())
 	builder()
 
 def update_employee():
@@ -129,6 +129,7 @@ def update_employee():
 	start_entry.delete(0, END)
 
 	# Refresh
+	my_tree.delete(*my_tree.get_children())
 	builder()
 
 def delete_employee():
@@ -145,6 +146,7 @@ def delete_employee():
 	start_entry.delete(0, END)
 
 	# Refresh
+	my_tree.delete(*my_tree.get_children())
 	builder()
 
 # Select Record
@@ -178,7 +180,8 @@ def add_annual_leave():
 	sname = last_entry.get()
 	
 	# Send data to add annual leave	
-	db.add_annual_leave_db(id, fname, sname)
+	add_emp_window = db.add_annual_leave_db(id, fname, sname)
+	root.wait_window(add_emp_window)
 
 	# Clear entry boxes
 	id_entry.config(state="normal")
@@ -187,8 +190,12 @@ def add_annual_leave():
 	last_entry.delete(0, END)
 	start_entry.delete(0, END)
 
+	# Refresh
+	my_tree.delete(*my_tree.get_children())
+	builder()
+
 def edit_leave():
-	pass
+	leave.edit()
 
 # ##############################################################################################
 # WIDGETS
@@ -241,8 +248,8 @@ leave_frame.pack(fill="x", expand="no", padx=20, pady=(20,0))
 add_annual_button = Button(leave_frame, text='Add Annual Leave Taken', width=19, command=add_annual_leave)
 add_annual_button.grid(row=0, column=0, padx=10, pady=10)
 
-edit_annual_button = Button(leave_frame, text='Add Annual Leave Taken', width=19, command=edit_leave)
-edit_annual_button.grid(row=0, column=0, padx=10, pady=10)
+edit_annual_button = Button(leave_frame, text='Edit Leave Taken', width=19, command=edit_leave)
+edit_annual_button.grid(row=0, column=1, padx=10, pady=10)
 
 # Bind the treeview
 my_tree.bind("<ButtonRelease-1>", select_record)
