@@ -216,6 +216,10 @@ def delete_employee_db(id):
 # DATABSE FUNCTIONS
 # ##############################################################################################
 
+	# #####
+	# LEAVE
+	# #####
+
 # Add employee annual leave
 def add_annual_leave_db(id, fname, sname):
 	if id == '':
@@ -369,3 +373,36 @@ def update_leave_db(top, id, days, start_date, end_date):
 
 	except Exception as error:
 		messagebox.showerror(title='Update Leave Error', message=error, parent=top)
+
+# Delete Leave
+def delete_leave_db(top, id, start_date, end_date):
+	try:
+		response = messagebox.askyesno(title='Update Leave', message='Are You Sure You Want To Update Leave Infomation', 
+			parent=top)
+		
+		if response == 1:
+			con = sqlite3.connect("employeeLeave.db")
+			c = con.cursor()
+
+			# Turn on foreign keys
+			c.execute('PRAGMA foreign_keys = ON')
+
+			c.execute('''DELETE FROM annualLeave 
+						WHERE id = :id 
+						AND leaveStart = :leaveStart 
+						AND leaveEnd = :leaveEnd''',
+						{
+							'id' : id,
+							'leaveStart' : start_date,
+							'leaveEnd' : end_date
+							
+						})
+			
+			con.commit()
+			con.close()
+
+			# Display complete
+			messagebox.showinfo(title='Delete Leave', message='Deleted Employee Leave Successfully', parent=top)
+
+	except Exception as error:
+		messagebox.showerror(title='Delete Leave Error', message=error, parent=top)

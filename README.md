@@ -30,9 +30,11 @@ Tracks leave and sick leave accumulated and taken by employee.
 
 - ~Add annual leave~
 
-- Edit annual leave
+- ~Edit annual leave~
 
 - Add sick leave
+
+- Edit sick leave
 
 - Show all leave and sick leave taken (excel)
 
@@ -41,9 +43,9 @@ Tracks leave and sick leave accumulated and taken by employee.
 
 - Show sick leave available in table
 
-- Add accumlated leave
+- ~Add accumlated leave~
 
-- Add leave taken
+- ~Add annual leave taken~
 
 - Add sick leave taken
 

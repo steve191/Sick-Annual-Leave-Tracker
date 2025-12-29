@@ -140,6 +140,27 @@ def edit():
 		my_tree.delete(*my_tree.get_children())
 		builder()
 
+	def delete_leave():
+		id = id_entry.get()
+		start_date = start_entry.get()
+		end_date = end_entry.get()
+
+		# Delete leave
+		db.delete_leave_db(top, id, start_date, end_date)
+
+			# Clear input
+		id_entry.config(state="normal")
+		id_entry.delete(0, END)
+		first_entry.config(state="normal")
+		first_entry.delete(0, END)
+		leave_days_entry.delete(0, END)
+		start_entry.delete(0, END)
+		end_entry.delete(0, END)
+
+		# Refresh
+		my_tree.delete(*my_tree.get_children())
+		builder()
+
 	# ##############################################################################################
 	# WIDGETS
 	# ##############################################################################################
@@ -183,11 +204,9 @@ def edit():
 	update_button = Button(button_frame, text='Update Leave', width=12, command=update_leave)
 	update_button.grid(row=0, column=1, padx=10, pady=10)
 
-	# Buttons (delete)
-	
-	
-	
-	
+	delete_button = Button(button_frame, text='Delete Leave', width=12, command=delete_leave)
+	delete_button.grid(row=0, column=2, padx=10, pady=10)
+
 	# Bind the treeview
 	my_tree.bind("<ButtonRelease-1>", select_record)
 
