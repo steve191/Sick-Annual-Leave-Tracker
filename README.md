@@ -41,7 +41,7 @@ Tracks leave and sick leave accumulated and taken by employee.
 ##### <ins>Functionality</ins>
 - ~Show annual leave available in table~
 
-- Show sick leave available in table
+- ~Show sick leave available in table~
 
 - ~Add accumlated leave~
 

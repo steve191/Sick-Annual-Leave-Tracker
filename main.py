@@ -14,9 +14,9 @@ def builder():
 	count = 0
 	for record in records:
 		if count % 2 == 0:
-			my_tree.insert(parent='', index='end', iid=count, text='', values=(record[0], record[1], record[2], record[3], record[4]), tags=('evenrow',))
+			my_tree.insert(parent='', index='end', iid=count, text='', values=(record[0], record[1], record[2], record[3], record[4], record[5]), tags=('evenrow',))
 		else:
-			my_tree.insert(parent='', index='end', iid=count, text='', values=(record[0], record[1], record[2], record[3], record[4]), tags=('oddrow',))
+			my_tree.insert(parent='', index='end', iid=count, text='', values=(record[0], record[1], record[2], record[3], record[4], record[5]), tags=('oddrow',))
 		# increment counter
 		count += 1
 	
@@ -56,15 +56,16 @@ my_tree.pack()
 tree_scroll.config(command=my_tree.yview)
 
 # Define Columns
-my_tree['columns'] = ("ID", "First Name", "Last Name", "Start Date", "Leave Available")
+my_tree['columns'] = ("ID", "First Name", "Last Name", "Start Date", "Leave Available", "Sick Leave Available")
 
 # Format Columns
 my_tree.column("#0", width=0, stretch=NO)
 my_tree.column("ID", anchor=W, width=150)
 my_tree.column("First Name", anchor=W, width=150)
 my_tree.column("Last Name", anchor=W, width=150)
-my_tree.column("Start Date", anchor=CENTER, width=100)
-my_tree.column("Leave Available", anchor=CENTER, width=110)
+my_tree.column("Start Date", anchor=CENTER, width=80)
+my_tree.column("Leave Available", anchor=CENTER, width=90)
+my_tree.column("Sick Leave Available", anchor=CENTER, width=110)
 
 # Create Headings
 my_tree.heading("#0", text="", anchor=W)
@@ -73,6 +74,7 @@ my_tree.heading("First Name", text="First Name", anchor=W)
 my_tree.heading("Last Name", text="Last Name", anchor=W)
 my_tree.heading("Start Date", text="Start Date", anchor=CENTER)
 my_tree.heading("Leave Available", text="Leave Available", anchor=CENTER)
+my_tree.heading("Sick Leave Available", text="Sick Leave Available", anchor=CENTER)
 
 # Create Striped Row Tags
 my_tree.tag_configure('oddrow', background="white")

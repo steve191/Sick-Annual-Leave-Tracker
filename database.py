@@ -3,6 +3,7 @@ import os
 from tkinter import *
 from tkinter import messagebox
 from datetime import datetime
+from datetime import date
 from dateutil import parser
 from dateutil import relativedelta
 
@@ -35,6 +36,16 @@ if not os.path.exists('employeeLeave.db'):
 			FOREIGN KEY (ID) REFERENCES employees (ID)
 			)'''
 		)
+	
+	c.execute('''CREATE TABLE IF NOT EXISTS sickLeave (
+			ID TEXT,
+		    firstName Text,
+			leaveTaken INTEGER,
+			leaveStart TEXT,
+			leaveEnd TEXT,
+			FOREIGN KEY (ID) REFERENCES employees (ID)
+			)'''
+		)
 
 	con.commit()
 	con.close()
@@ -58,41 +69,89 @@ def collect_data_tree():
 		c.execute(f"SELECT * FROM annualLeave")
 		leave_taken = c.fetchall()
 		
+		c.execute(f"SELECT * FROM sickLeave")
+		sick_taken = c.fetchall()
+		
 		con.commit()
 		con.close()
-		
+
+		# GET ANNUAL LEAVE		
 		# Get date now
 		now = datetime.now()
 		date_now = now.strftime("%d/%m/%Y")
 
 		# Make into list
-		rec_list = []
+		emp_rec_list = []
 
 		for x in emp_rec:
-			rec_list.append([x[0], x[1], x[2], x[3]])
+			emp_rec_list.append([x[0], x[1], x[2], x[3]])
 
 		# Add leave days to employee info
 		empolyee_info = []
 
-		for rec in rec_list:
-			# convert string to date object
+		for rec in emp_rec_list:
+			# ##################################
+			# GET ANNUAL LEAVE
+			# ##################################
+
+			# Convert string to date object
 			start_date = datetime.strptime(rec[3], "%d/%m/%Y")
 			end_date = datetime.strptime(date_now, "%d/%m/%Y")
 
 			# Get the relativedelta between two dates
 			delta = relativedelta.relativedelta(end_date, start_date)
 
-			# Get months difference
+			# Get months difference for annual leave
 			months = delta.months + (delta.years * 12)
 			leave_days = months * 1.25
-			
+
 			# Get leave days already taken
 			for leave in leave_taken:
 				if rec[0] == leave[0]:
 					leave_days -= leave[2]
 
+			# ##################################
+			# GET SICK LEAVE
+			# ##################################
+			
+			# Get todays date and employee start date into date object
+			today_date = date.today()
+			format_start_date = start_date.strftime("%d.%m.%Y")
+			# datetime.strptime(rec[3], "%d/%m/%Y").strftime("%d.%m.%Y")
+			emp_start_date = datetime.strptime(format_start_date, "%d.%m.%Y").date()
+
+			# Calculate the relative difference
+			delta = relativedelta.relativedelta(today_date, emp_start_date)
+
+			# Convert years to months and add remaining months
+			total_months = delta.years * 12 + delta.months
+
+			# Get current cycle
+			current_cycle = int(total_months / 36)
+
+			# Get start and end cycle dates
+			start_cycle_date = emp_start_date + relativedelta.relativedelta(months=(current_cycle * 36))
+			end_cycle_date = emp_start_date + relativedelta.relativedelta(months=((current_cycle + 1) * 36))
+
+			# Check if leave is taken in current cycle
+			sick_leave_taken = 0
+
+			for leave in sick_taken:
+				# Convert date to right format
+				if rec[0] == leave[0]:
+					format_date = datetime.strptime(leave[3], "%d/%m/%Y").strftime("%d.%m.%Y")
+					leave_start_date = datetime.strptime(format_date, "%d.%m.%Y").date()
+
+					# Check if leave dates in current cycle
+					if start_cycle_date <= leave_start_date <= end_cycle_date:
+						sick_leave_taken += leave[2]	
+			
+			# ##################################
+			# APPEND ALL LEAVE TO LIST
+			# ##################################
+
 			# Add leave days to eployee data
-			emp_info = rec + [leave_days]
+			emp_info = rec + [leave_days] + [36 - sick_leave_taken]
 			# print(emp_info)
 			empolyee_info.append(emp_info)
 
