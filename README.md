@@ -32,22 +32,19 @@ Tracks leave and sick leave accumulated and taken by employee.
 
 - ~Edit annual leave~
 
+- ~Delete annual leave~
+
 - Add sick leave
 
 - Edit sick leave
 
-- Show all leave and sick leave taken (excel)
-
-##### <ins>Functionality</ins>
 - ~Show annual leave available in table~
 
 - ~Show sick leave available in table~
 
-- ~Add accumlated leave~
+- Show all leave and sick leave taken (excel)
 
-- ~Add annual leave taken~
-
-- Add sick leave taken
+##### <ins>Functionality</ins>
 
 - See total leave acc and leave taken (Annual and Sick)
 

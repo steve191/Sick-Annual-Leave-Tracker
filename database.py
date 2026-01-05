@@ -275,9 +275,9 @@ def delete_employee_db(id):
 # DATABSE FUNCTIONS
 # ##############################################################################################
 
-	# #####
-	# LEAVE
-	# #####
+	# ############
+	# ANNUAL LEAVE
+	# ############
 
 # Add employee annual leave
 def add_annual_leave_db(id, fname, sname):
@@ -395,7 +395,7 @@ def add_annual_leave_db(id, fname, sname):
 
 		return top
 	
-# Edit Leave
+# Edit annual Leave
 def update_leave_db(top, id, days, start_date, end_date):
 	try:
 		if days == '' or start_date == '' or end_date == '':
@@ -433,7 +433,7 @@ def update_leave_db(top, id, days, start_date, end_date):
 	except Exception as error:
 		messagebox.showerror(title='Update Leave Error', message=error, parent=top)
 
-# Delete Leave
+# Delete annual Leave
 def delete_leave_db(top, id, start_date, end_date):
 	try:
 		response = messagebox.askyesno(title='Update Leave', message='Are You Sure You Want To Update Leave Infomation', 
@@ -465,3 +465,123 @@ def delete_leave_db(top, id, start_date, end_date):
 
 	except Exception as error:
 		messagebox.showerror(title='Delete Leave Error', message=error, parent=top)
+
+	# ############
+	# SICK LEAVE
+	# ############
+
+# Add employee sick leave
+def add_sick_leave_db(id, fname, sname):
+	if id == '':
+		messagebox.showerror(title='ID Not Exist', message='No Employee Selected, Please Select An Employee')
+	else:
+		top = Toplevel()
+		top.attributes('-topmost', 'true')
+		top.geometry("300x300")
+		top.title("Add Sick Leave")
+
+		# ID
+		id_label = Label(top, text="ID:")
+		id_label.grid(row=0, column=0, padx=10, pady=10)
+		id_entry = Entry(top)
+		id_entry.grid(row=0, column=1, padx=10, pady=10)
+		id_entry.insert(0,id)
+		id_entry.config(state='readonly')
+		
+		# First name
+		fname_label = Label(top, text="First Name:")
+		fname_label.grid(row=1, column=0, padx=10, pady=10)
+		fname_entry = Entry(top)
+		fname_entry.grid(row=1, column=1, padx=10, pady=10)
+		fname_entry.insert(0,fname)
+		fname_entry.config(state='readonly')
+		
+		# Last name
+		sname_label = Label(top, text="Last Name:")
+		sname_label.grid(row=2, column=0, padx=10, pady=10)
+		sname_entry = Entry(top)
+		sname_entry.grid(row=2, column=1, padx=10, pady=10)
+		sname_entry.insert(0,sname)
+		sname_entry.config(state='readonly')
+
+		# Leave taken (No. days)
+		leave_label = Label(top, text="Leave Taken in days:")
+		leave_label.grid(row=3, column=0, padx=10, pady=10)
+		leave_entry = Entry(top)
+		leave_entry.grid(row=3, column=1, padx=10, pady=10)
+
+		# Leave Start 
+		leave_start_label = Label(top, text="Leave Start Date:")
+		leave_start_label.grid(row=4, column=0, padx=10, pady=10)
+		leave_start_entry = Entry(top)
+		leave_start_entry.grid(row=4, column=1, padx=10, pady=10)
+
+		# Leave End
+		leave_end_label = Label(top, text="Leave End Date:")
+		leave_end_label.grid(row=5, column=0, padx=10, pady=10)
+		leave_end_entry = Entry(top)
+		leave_end_entry.grid(row=5, column=1, padx=10, pady=10)
+
+		def save():
+			id = id_entry.get()
+			leave_days = leave_entry.get()
+			leave_start = leave_start_entry.get()
+			leave_end = leave_end_entry.get()
+
+			# Add leave to database
+			try:
+				con = sqlite3.connect("employeeLeave.db")
+				c = con.cursor()
+
+				# Turn on foreign keys
+				c.execute('PRAGMA foreign_keys = ON')
+
+				# Parse dates to right format
+				start_leave = str(parser.parse(leave_start, dayfirst=True).strftime('%d/%m/%Y'))
+				end_leave = str(parser.parse(leave_end, dayfirst=True).strftime('%d/%m/%Y'))
+
+				# Check to see nothing was left out
+				if leave_days == '' or leave_start == '' or leave_end == '':
+					response = messagebox.askyesno(title='Add Employee Sick Leave', message='Some Employee Info Blank. Is This OK?')
+					
+					if response == 1:
+						c.execute("INSERT INTO sickLeave VALUES (:id, :firstName, :leaveTaken, :leaveStart, :leaveEnd)",
+								{
+									'id' : id,
+									'firstName' : fname,
+									'leaveTaken' : leave_days,
+									'leaveStart' : start_leave,
+									'leaveEnd' : end_leave
+								})
+						
+						# Display complete
+						messagebox.showinfo(title='Add Employee Sick Leave', message='Added Employee Annual Leave Successfully')
+
+						# Close window
+						top.destroy()
+				else:
+					c.execute("INSERT INTO sickLeave VALUES (:id, :firstName, :leaveTaken, :leaveStart, :leaveEnd)",
+								{
+									'id' : id,
+									'firstName' : fname,
+									'leaveTaken' : leave_days,
+									'leaveStart' : start_leave,
+									'leaveEnd' : end_leave
+								})
+					
+					# Display complete
+					messagebox.showinfo(title='Add Employee Sick Leave', message='Added Employee Annual Leave Successfully')
+
+					# Close window
+					top.destroy()
+					
+				con.commit()
+				con.close()
+				
+			except Exception as error:
+				messagebox.showerror(title='Add Employee Sick Leave', message=error)
+			
+		save_button = Button(top, text="Save", command=save)
+		save_button.grid(row=6, column=0, columnspan=2, sticky=NSEW, padx=10, pady=10)
+
+		return top

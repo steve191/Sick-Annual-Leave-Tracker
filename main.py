@@ -1,5 +1,5 @@
 import database as db
-import leave
+import annual_leave
 from tkinter import *
 from tkinter import ttk
 
@@ -196,8 +196,28 @@ def add_annual_leave():
 	my_tree.delete(*my_tree.get_children())
 	builder()
 
-def edit_leave():
-	leave.edit()
+def edit_annual_leave():
+	annual_leave.edit()
+
+def add_sick_leave():
+	id = id_entry.get()
+	fname = first_entry.get()
+	sname = last_entry.get()
+	
+	# Send data to add annual leave	
+	add_emp_window = db.add_sick_leave_db(id, fname, sname)
+	root.wait_window(add_emp_window)
+
+	# Clear entry boxes
+	id_entry.config(state="normal")
+	id_entry.delete(0, END)
+	first_entry.delete(0, END)
+	last_entry.delete(0, END)
+	start_entry.delete(0, END)
+
+	# Refresh
+	my_tree.delete(*my_tree.get_children())
+	builder()
 
 # ##############################################################################################
 # WIDGETS
@@ -244,14 +264,22 @@ delete_employee_button = Button(setup_frame, text='Delete Employee', width=15, c
 delete_employee_button.grid(row=0, column=3, padx=10, pady=10)
 
 # Leave Frame
-leave_frame = LabelFrame(root, text="Leave")
+leave_frame = LabelFrame(root, text="Annual Leave and Sick Leave")
 leave_frame.pack(fill="x", expand="no", padx=20, pady=(20,0))
+
+leave_frame.grid_columnconfigure(2, weight=1)
 
 add_annual_button = Button(leave_frame, text='Add Annual Leave Taken', width=19, command=add_annual_leave)
 add_annual_button.grid(row=0, column=0, padx=10, pady=10)
 
-edit_annual_button = Button(leave_frame, text='Edit Leave Taken', width=19, command=edit_leave)
+edit_annual_button = Button(leave_frame, text='Edit Annual Leave', width=19, command=edit_annual_leave)
 edit_annual_button.grid(row=0, column=1, padx=10, pady=10)
+
+add_sick_button = Button(leave_frame, text='Add Sick Leave Taken', width=19, command=add_sick_leave)
+add_sick_button.grid(row=0, column=2, padx=10, pady=10, sticky=E)
+
+# edit_sick_button = Button(leave_frame, text='Edit Sick Leave', width=19, command=edit_sick_leave)
+# edit_sick_button.grid(row=0, column=3, padx=10, pady=10, sticky=E)
 
 # Bind the treeview
 my_tree.bind("<ButtonRelease-1>", select_record)
