@@ -1,5 +1,6 @@
 import database as db
 import annual_leave
+import sick_leave
 from tkinter import *
 from tkinter import ttk
 
@@ -219,6 +220,9 @@ def add_sick_leave():
 	my_tree.delete(*my_tree.get_children())
 	builder()
 
+def edit_sick_leave():
+	sick_leave.edit()
+
 # ##############################################################################################
 # WIDGETS
 # ##############################################################################################
@@ -278,8 +282,8 @@ edit_annual_button.grid(row=0, column=1, padx=10, pady=10)
 add_sick_button = Button(leave_frame, text='Add Sick Leave Taken', width=19, command=add_sick_leave)
 add_sick_button.grid(row=0, column=2, padx=10, pady=10, sticky=E)
 
-# edit_sick_button = Button(leave_frame, text='Edit Sick Leave', width=19, command=edit_sick_leave)
-# edit_sick_button.grid(row=0, column=3, padx=10, pady=10, sticky=E)
+edit_sick_button = Button(leave_frame, text='Edit Sick Leave', width=19, command=edit_sick_leave)
+edit_sick_button.grid(row=0, column=3, padx=10, pady=10, sticky=E)
 
 # Bind the treeview
 my_tree.bind("<ButtonRelease-1>", select_record)

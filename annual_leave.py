@@ -7,10 +7,10 @@ def edit():
 	top = Toplevel()
 	top.attributes('-topmost', 'true')
 	top.geometry("1150x550")
-	top.title("Edit Leave")
+	top.title("Edit Annual Leave")
 
 	def builder():
-		records = db.collect_data_leave_tree()
+		records = db.collect_data_annual_leave_tree()
 
 		my_tree.delete(*my_tree.get_children())
 
@@ -60,13 +60,13 @@ def edit():
 	tree_scroll.config(command=my_tree.yview)
 
 	# Define Columns
-	my_tree['columns'] = ("ID", "First Name", "Leave Days", "Start Date", "End Date")
+	my_tree['columns'] = ("ID", "First Name", "Annual Leave Days", "Start Date", "End Date")
 
 	# Format Columns
 	my_tree.column("#0", width=0, stretch=NO)
 	my_tree.column("ID", anchor=W, width=150)
 	my_tree.column("First Name", anchor=W, width=150)
-	my_tree.column("Leave Days", anchor=W, width=150)
+	my_tree.column("Annual Leave Days", anchor=W, width=150)
 	my_tree.column("Start Date", anchor=CENTER, width=100)
 	my_tree.column("End Date", anchor=CENTER, width=110)
 
@@ -74,7 +74,7 @@ def edit():
 	my_tree.heading("#0", text="", anchor=W)
 	my_tree.heading("ID", text="ID", anchor=W)
 	my_tree.heading("First Name", text="First Name", anchor=W)
-	my_tree.heading("Leave Days", text="Leave Days", anchor=W)
+	my_tree.heading("Annual Leave Days", text="Annual Leave Days", anchor=W)
 	my_tree.heading("Start Date", text="Start Date", anchor=CENTER)
 	my_tree.heading("End Date", text="End Date", anchor=CENTER)
 

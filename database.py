@@ -160,7 +160,7 @@ def collect_data_tree():
 	except Exception as error:
 		messagebox.showerror(title='Add Employee Error', message=error)
 
-def collect_data_leave_tree():		
+def collect_data_annual_leave_tree():		
 	try:
 		con = sqlite3.connect("employeeLeave.db")
 		c = con.cursor()
@@ -169,6 +169,25 @@ def collect_data_leave_tree():
 		c.execute('PRAGMA foreign_keys = ON')
 
 		c.execute(f"SELECT * FROM annualLeave ORDER BY ID ASC")
+		records = c.fetchall()
+		
+		con.commit()
+		con.close()
+		
+		return records
+		
+	except Exception as error:
+		messagebox.showerror(title='Add Employee Error', message=error)
+
+def collect_data_sick_leave_tree():		
+	try:
+		con = sqlite3.connect("employeeLeave.db")
+		c = con.cursor()
+
+		# Turn on foreign keys
+		c.execute('PRAGMA foreign_keys = ON')
+
+		c.execute(f"SELECT * FROM sickLeave ORDER BY ID ASC")
 		records = c.fetchall()
 		
 		con.commit()
@@ -436,7 +455,7 @@ def update_leave_db(top, id, days, start_date, end_date):
 # Delete annual Leave
 def delete_leave_db(top, id, start_date, end_date):
 	try:
-		response = messagebox.askyesno(title='Update Leave', message='Are You Sure You Want To Update Leave Infomation', 
+		response = messagebox.askyesno(title='Delete Leave', message='Are You Sure You Want To Delete Leave Infomation', 
 			parent=top)
 		
 		if response == 1:
@@ -585,3 +604,74 @@ def add_sick_leave_db(id, fname, sname):
 		save_button.grid(row=6, column=0, columnspan=2, sticky=NSEW, padx=10, pady=10)
 
 		return top
+
+# Edit sick annual Leave
+def update_sick_leave_db(top, id, days, start_date, end_date):
+	try:
+		if days == '' or start_date == '' or end_date == '':
+			raise Exception("Information Empty!")
+		else:
+			response = messagebox.askyesno(title='Update Sick Leave', message='Are You Sure You Want To Update Leave Infomation', 
+			parent=top)
+
+			if response == 1:
+				con = sqlite3.connect("employeeLeave.db")
+				c = con.cursor()
+
+				# Turn on foreign keys
+				c.execute('PRAGMA foreign_keys = ON')
+
+				c.execute('''UPDATE sickLeave SET
+								leaveTaken = :leaveTaken,
+								leaveStart = :leaveStart,
+								leaveEnd = :leaveEnd
+					
+								WHERE id = :id''',
+								{
+									'id' : id,
+									'leaveTaken' : days,
+									'leaveStart' : start_date,
+									'leaveEnd' : end_date
+								})
+				
+				con.commit()
+				con.close()
+				
+				# Display complete
+				messagebox.showinfo(title='Update Sick Leave', message='Updated Employee Sick Leave Successfully', parent=top)
+
+	except Exception as error:
+		messagebox.showerror(title='Update Sick Leave Error', message=error, parent=top)
+
+# Delete sick Leave
+def delete_sick_leave_db(top, id, start_date, end_date):
+	try:
+		response = messagebox.askyesno(title='Delete Sick Leave', message='Are You Sure You Want To Delete Sick Leave Infomation', 
+			parent=top)
+		
+		if response == 1:
+			con = sqlite3.connect("employeeLeave.db")
+			c = con.cursor()
+
+			# Turn on foreign keys
+			c.execute('PRAGMA foreign_keys = ON')
+
+			c.execute('''DELETE FROM sickLeave 
+						WHERE id = :id 
+						AND leaveStart = :leaveStart 
+						AND leaveEnd = :leaveEnd''',
+						{
+							'id' : id,
+							'leaveStart' : start_date,
+							'leaveEnd' : end_date
+							
+						})
+			
+			con.commit()
+			con.close()
+
+			# Display complete
+			messagebox.showinfo(title='Delete Sick Leave', message='Deleted Employee Sick Leave Successfully', parent=top)
+
+	except Exception as error:
+		messagebox.showerror(title='Delete Sick Leave Error', message=error, parent=top)
