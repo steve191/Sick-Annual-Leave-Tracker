@@ -3,6 +3,7 @@ import annual_leave
 import sick_leave
 import view_leave
 import med_docs
+import backup
 from tkinter import *
 from tkinter import ttk
 
@@ -139,9 +140,11 @@ def update_employee():
 
 def delete_employee():
 	id = id_entry.get()
+	fname = first_entry.get().strip()
+	sname = last_entry.get().strip()
 
 	# Delete in database
-	db.delete_employee_db(id)
+	backup.backup(id, fname, sname)
 
 	# Clear entry boxes
 	id_entry.config(state='normal')

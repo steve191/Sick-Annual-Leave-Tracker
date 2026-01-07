@@ -58,6 +58,7 @@ if not os.path.exists(database_path):
 			leaveStart TEXT,
 			leaveEnd TEXT,
 			FOREIGN KEY (ID) REFERENCES employees (ID)
+		    ON DELETE CASCADE
 			)'''
 		)
 	
@@ -68,6 +69,7 @@ if not os.path.exists(database_path):
 			leaveStart TEXT,
 			leaveEnd TEXT,
 			FOREIGN KEY (ID) REFERENCES employees (ID)
+		    ON DELETE CASCADE
 			)'''
 		)
 
@@ -222,21 +224,31 @@ def collect_data_sick_leave_tree():
 	except Exception as error:
 		messagebox.showerror(title='Add Employee Error', message=error)
 
-def collect_data_view():
+def collect_data_view(id=None):
 		con = sqlite3.connect(database_path)
 		c = con.cursor()
 
 		# Turn on foreign keys
 		c.execute('PRAGMA foreign_keys = ON')
 
-		c.execute(f"SELECT * FROM employees")
-		employees = c.fetchall()
+		if id == None:
+			c.execute("SELECT * FROM employees")
+			employees = c.fetchall()
 
-		c.execute(f"SELECT * FROM annualLeave")
-		annual_leave_taken = c.fetchall()
-		
-		c.execute(f"SELECT * FROM sickLeave")
-		sick_leave_taken = c.fetchall()
+			c.execute("SELECT * FROM annualLeave")
+			annual_leave_taken = c.fetchall()
+			
+			c.execute("SELECT * FROM sickLeave")
+			sick_leave_taken = c.fetchall()
+		else:
+			c.execute(f"SELECT * FROM employees WHERE id = {id}")
+			employees = c.fetchall()
+
+			c.execute(f"SELECT * FROM annualLeave WHERE id = {id}")
+			annual_leave_taken = c.fetchall()
+			
+			c.execute(f"SELECT * FROM sickLeave WHERE id = {id}")
+			sick_leave_taken = c.fetchall()
 		
 		con.commit()
 		con.close()
@@ -362,26 +374,28 @@ def update_employee_db(id, fname, sname, start_date):
 
 # Update employee in database
 def delete_employee_db(id):
-	try:
-		con = sqlite3.connect(database_path)
-		c = con.cursor()
+	response = messagebox.askyesno(title='Delete Employee', message='Are You Sure You Want To Deleted Employee')
+	if response == 1:
+		try:
+			con = sqlite3.connect(database_path)
+			c = con.cursor()
 
-		# Turn on foreign keys
-		c.execute('PRAGMA foreign_keys = ON')
+			# Turn on foreign keys
+			c.execute('PRAGMA foreign_keys = ON')
 
-		c.execute("DELETE FROM employees WHERE id = :id",
-						{
-							'id' : id
-						})
-		
-		con.commit()
-		con.close()
-		
-		# Display complete
-		messagebox.showinfo(title='Delete Employee', message='Deleted Employee Successfully')
+			c.execute("DELETE FROM employees WHERE id = :id",
+							{
+								'id' : id
+							})
+			
+			con.commit()
+			con.close()
+			
+			# Display complete
+			messagebox.showinfo(title='Delete Employee', message='Deleted Employee Successfully')
 
-	except Exception as error:
-		messagebox.showerror(title='Delete Employee Error', message=error)
+		except Exception as error:
+			messagebox.showerror(title='Delete Employee Error', message=error)
 
 
 # ##############################################################################################
