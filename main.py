@@ -1,3 +1,4 @@
+import os
 import database as db
 import annual_leave
 import sick_leave
@@ -236,6 +237,9 @@ def open_med():
 	last_entry.delete(0, END)
 	start_entry.delete(0, END)
 
+def open_backup():
+	os.startfile('Employee Backups')
+
 # ##############################################################################################
 # WIDGETS
 # ##############################################################################################
@@ -307,6 +311,9 @@ view_leave_button.grid(row=0, column=0, padx=10, pady=10)
 
 upload_docs_button = Button(doc_frame, text='Upload Medical Documents', width=21, command=open_med)
 upload_docs_button.grid(row=0, column=1, padx=10, pady=10)
+
+backup_button = Button(doc_frame, text='Open Back Up Folder', width=21, command=open_backup)
+backup_button.grid(row=0, column=2, padx=10, pady=10)
 
 # Bind the treeview
 my_tree.bind("<ButtonRelease-1>", select_record)
