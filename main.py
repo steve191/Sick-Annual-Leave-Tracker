@@ -223,6 +223,9 @@ def add_sick_leave():
 def edit_sick_leave():
 	sick_leave.edit()
 
+def view_leave():
+	pass
+
 # ##############################################################################################
 # WIDGETS
 # ##############################################################################################
@@ -285,13 +288,23 @@ add_sick_button.grid(row=0, column=2, padx=10, pady=10, sticky=E)
 edit_sick_button = Button(leave_frame, text='Edit Sick Leave', width=19, command=edit_sick_leave)
 edit_sick_button.grid(row=0, column=3, padx=10, pady=10, sticky=E)
 
+# Document Frame
+doc_frame = LabelFrame(root, text="Documents")
+doc_frame.pack(fill="x", expand="no", padx=20, pady=(20,0))
+
+view_leave_button = Button(doc_frame, text='View All Leave', width=19, command=view_leave)
+view_leave_button.grid(row=0, column=0, padx=10, pady=10)
+
+# upload_docs_button = Button(doc_frame, text='Upload Medical Documents', width=19, command=view_leave)
+# upload_docs_button.grid(row=0, column=1, padx=10, pady=10)
+
 # Bind the treeview
 my_tree.bind("<ButtonRelease-1>", select_record)
 
 # ROOT WINDOW CONFIG
 root.title('Annual / Sick Leave')
 # root.iconbitmap('icons/smoking.ico')
-root.geometry("1000x550")
+root.geometry("1000x620")
 # root.columnconfigure(0, weight=1)
 
 # RUN BUILDER

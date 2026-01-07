@@ -34,9 +34,9 @@ Tracks leave and sick leave accumulated and taken by employee.
 
 - ~Delete annual leave~
 
-- Add sick leave
+- ~Add sick leave~
 
-- Edit sick leave
+- ~Edit sick leave~
 
 - ~Show annual leave available in table~
 

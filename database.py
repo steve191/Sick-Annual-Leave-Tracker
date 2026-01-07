@@ -198,6 +198,61 @@ def collect_data_sick_leave_tree():
 	except Exception as error:
 		messagebox.showerror(title='Add Employee Error', message=error)
 
+def collect_data_view():
+		con = sqlite3.connect("employeeLeave.db")
+		c = con.cursor()
+
+		# Turn on foreign keys
+		c.execute('PRAGMA foreign_keys = ON')
+
+		c.execute(f"SELECT * FROM employees")
+		employees = c.fetchall()
+
+		c.execute(f"SELECT * FROM annualLeave")
+		annual_leave_taken = c.fetchall()
+		
+		c.execute(f"SELECT * FROM sickLeave")
+		sick_leave_taken = c.fetchall()
+		
+		con.commit()
+		con.close()
+
+		# Put all employee info and leave in to dic
+		emp_info = {}
+
+		for x in employees:
+			id = x[0]
+			fname = x[1]
+			sname = x[2]
+			start_date = x[3]
+
+			# Add ID key to dict
+			emp_info[id] = {}
+
+			# Add employee info to dict
+			emp_info[id]['info'] = [fname, sname, start_date]
+
+		for x in annual_leave_taken:
+			id = x[0]
+			al_days = x[2]
+			lsd = x[3]
+			led = x[4]
+
+			# Add employee annual leave to dict
+			emp_info[id].setdefault('annual', []).append([al_days, lsd, led])
+
+
+		for x in sick_leave_taken:
+			id = x[0]
+			sl_days = x[2]
+			ssd = x[3]
+			sed = x[4]
+
+			# Add employee sick leave to dict
+			emp_info[id].setdefault('sick', []).append([al_days, lsd, led])
+
+		return emp_info
+
 # ##############################################################################################
 # SETUP EMPLOYEE FUNCTIONS
 # ##############################################################################################
