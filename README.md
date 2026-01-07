@@ -23,9 +23,9 @@ Tracks leave and sick leave accumulated and taken by employee.
 
 - Delete employee
 	- ~Add Delete button and function~
-	- When deleting employee make back up of leave acc and taken (excel)
-	  also of med documents
-	  also cascade deletion
+	- ~When deleting employee make back up of leave acc and taken (excel)~
+	  ~also of med documents~
+	  ~also cascade deletion~
 
 ###### <ins>Leave</ins>
 
