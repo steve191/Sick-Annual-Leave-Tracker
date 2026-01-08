@@ -1,4 +1,5 @@
 import os
+import sys
 import database as db
 import annual_leave
 import sick_leave
@@ -240,6 +241,9 @@ def open_med():
 def open_backup():
 	os.startfile('Employee Backups')
 
+def open_rates():
+	view_leave.rates_file()
+
 # ##############################################################################################
 # WIDGETS
 # ##############################################################################################
@@ -314,6 +318,9 @@ upload_docs_button.grid(row=0, column=1, padx=10, pady=10)
 
 backup_button = Button(doc_frame, text='Open Back Up Folder', width=21, command=open_backup)
 backup_button.grid(row=0, column=2, padx=10, pady=10)
+
+rates_button = Button(doc_frame, text='Open Rates Excel', width=18, command=open_rates)
+rates_button.grid(row=0, column=3, padx=10, pady=10)
 
 # Bind the treeview
 my_tree.bind("<ButtonRelease-1>", select_record)

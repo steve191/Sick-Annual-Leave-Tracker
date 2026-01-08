@@ -5,6 +5,25 @@ from openpyxl import Workbook
 from openpyxl.styles import Alignment, NamedStyle, Font, Border, Side
 from database import collect_data_view
 
+
+def rates_file():
+	if getattr(sys, 'frozen', False):
+		base_path = sys._MEIPASS
+	else:
+		base_path = os.path.dirname(os.path.abspath(__file__))
+
+	file = os.path.join(base_path, 'rates.xlsx')
+
+	if os.path.exists(file):
+		os.startfile(file)
+	else:
+		# Create rates excel file
+		wb = Workbook()
+		ws = wb.active
+		ws.title = "Rates"
+		wb.save(file)
+		os.startfile(file)
+
 def get_save_path(filename):
     if getattr(sys, 'frozen', False):
         base_path = sys._MEIPASS

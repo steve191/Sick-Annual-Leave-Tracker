@@ -56,7 +56,7 @@ Tracks leave and sick leave accumulated and taken by employee.
 
  - Long term employee gets 20day leave every 12 months (son)
 
- - Add button that open excell sheet to save wages rates
+ - ~Add button that open excel sheet to save wages rates~
 
  - For sick leave for 6 months get earn 1 day for every 26 days worked (month)
 
