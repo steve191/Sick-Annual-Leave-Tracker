@@ -57,7 +57,7 @@ def edit():
 	tree_scroll.config(command=my_tree.yview)
 
 	# Define Columns
-	my_tree['columns'] = ("Rowid","ID", "First Name", "Sick Leave Days", "Start Date", "End Date", "Comment")
+	my_tree['columns'] = ("Rowid", "ID", "First Name", "Sick Leave Days", "Start Date", "End Date", "Comment")
 
 	# Display Coumns
 	my_tree['displaycolumns'] = ("ID", "First Name", "Sick Leave Days", "Start Date", "End Date", "Comment")

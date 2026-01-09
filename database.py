@@ -199,7 +199,7 @@ def collect_data_annual_leave_tree():
 		# Turn on foreign keys
 		c.execute('PRAGMA foreign_keys = ON')
 
-		c.execute(f"SELECT * FROM annualLeave ORDER BY ID ASC")
+		c.execute(f"SELECT rowid, * FROM annualLeave ORDER BY ID ASC")
 		records = c.fetchall()
 		
 		con.commit()
@@ -535,7 +535,7 @@ def add_annual_leave_db(id, fname, sname):
 		return top
 	
 # Edit annual Leave
-def update_leave_db(top, id, days, start_date, end_date, comment):
+def update_leave_db(top, rowid, days, start_date, end_date, comment):
 	try:
 		if days == '' or start_date == '' or end_date == '':
 			raise Exception("Information Empty!")
@@ -556,9 +556,9 @@ def update_leave_db(top, id, days, start_date, end_date, comment):
 								leaveEnd = :leaveEnd,
 								comment = :comment
 					
-								WHERE id = :id''',
+								WHERE rowid = :rowid''',
 								{
-									'id' : id,
+									'rowid' : rowid,
 									'leaveTaken' : days,
 									'leaveStart' : start_date,
 									'leaveEnd' : end_date,
