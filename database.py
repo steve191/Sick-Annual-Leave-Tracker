@@ -779,7 +779,7 @@ def update_sick_leave_db(top, rowid, days, start_date, end_date, comment):
 		messagebox.showerror(title='Update Sick Leave Error', message=error, parent=top)
 
 # Delete sick Leave
-def delete_sick_leave_db(top, id, start_date, end_date):
+def delete_sick_leave_db(top, rowid):
 	try:
 		response = messagebox.askyesno(title='Delete Sick Leave', message='Are You Sure You Want To Delete Sick Leave Infomation', 
 			parent=top)
@@ -791,15 +791,9 @@ def delete_sick_leave_db(top, id, start_date, end_date):
 			# Turn on foreign keys
 			c.execute('PRAGMA foreign_keys = ON')
 
-			c.execute('''DELETE FROM sickLeave 
-						WHERE id = :id 
-						AND leaveStart = :leaveStart 
-						AND leaveEnd = :leaveEnd''',
+			c.execute('''DELETE FROM sickLeave WHERE rowid = :rowid''',
 						{
-							'id' : id,
-							'leaveStart' : start_date,
-							'leaveEnd' : end_date
-							
+							'rowid' : rowid							
 						})
 			
 			con.commit()

@@ -2,7 +2,9 @@ from tkinter import *
 from tkinter import ttk
 import database as db
 
-
+# UPDATE LEAVE COLLECT FUNC WITH ROWID
+# UPDATE TREE WITH HIDDEN ROW
+# UPDATE UPDATE AND DELETE FUNCTIONS
 def edit():
 	top = Toplevel()
 	top.attributes('-topmost', 'true')
