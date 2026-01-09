@@ -575,7 +575,7 @@ def update_leave_db(top, rowid, days, start_date, end_date, comment):
 		messagebox.showerror(title='Update Leave Error', message=error, parent=top)
 
 # Delete annual Leave
-def delete_leave_db(top, id, start_date, end_date, comment):
+def delete_leave_db(top, rowid):
 	try:
 		response = messagebox.askyesno(title='Delete Leave', message='Are You Sure You Want To Delete Leave Infomation', 
 			parent=top)
@@ -587,17 +587,9 @@ def delete_leave_db(top, id, start_date, end_date, comment):
 			# Turn on foreign keys
 			c.execute('PRAGMA foreign_keys = ON')
 
-			c.execute('''DELETE FROM annualLeave 
-						WHERE id = :id 
-						AND leaveStart = :leaveStart 
-						AND leaveEnd = :leaveEnd
-			 			AND comment = :comment''',
+			c.execute('''DELETE FROM annualLeave WHERE rowid = :rowid''',
 						{
-							'id' : id,
-							'leaveStart' : start_date,
-							'leaveEnd' : end_date,
-							'comment' : comment
-							
+							'rowid' : rowid,							
 						})
 			
 			con.commit()

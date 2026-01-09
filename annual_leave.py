@@ -156,13 +156,13 @@ def edit():
 		builder()
 
 	def delete_leave():
-		id = id_entry.get()
-		start_date = start_entry.get()
-		end_date = end_entry.get()
-		comment = comment_entry.get("1.0", "end-1c")
+		# Grab record and rowid number
+		selected = my_tree.focus()
+		values = my_tree.item(selected, 'values')
+		rowid = values[0]
 
 		# Delete leave
-		db.delete_leave_db(top, id, start_date, end_date, comment)
+		db.delete_leave_db(top, rowid)
 
 		# Clear input
 		id_entry.config(state="normal")
