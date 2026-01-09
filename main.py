@@ -233,6 +233,15 @@ def add_sick_leave():
 	my_tree.delete(*my_tree.get_children())
 	builder()
 
+def edit_sick_leave():
+	# Wait for window
+	window_wait = sick_leave.edit()
+	root.wait_window(window_wait)
+
+	# Refresh
+	my_tree.delete(*my_tree.get_children())
+	builder()
+
 def open_med():
 	fname = first_entry.get().strip()
 	sname = last_entry.get().strip()
@@ -312,7 +321,7 @@ edit_annual_button.grid(row=0, column=1, padx=10, pady=10)
 add_sick_button = Button(leave_frame, text='Add Sick Leave Taken', width=19, command=add_sick_leave)
 add_sick_button.grid(row=0, column=2, padx=10, pady=10, sticky=E)
 
-edit_sick_button = Button(leave_frame, text='Edit Sick Leave', width=19, command=sick_leave.edit)
+edit_sick_button = Button(leave_frame, text='Edit Sick Leave', width=19, command=edit_sick_leave)
 edit_sick_button.grid(row=0, column=3, padx=10, pady=10, sticky=E)
 
 # Document Frame

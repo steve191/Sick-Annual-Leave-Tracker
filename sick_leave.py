@@ -212,3 +212,5 @@ def edit():
 
 	# Build tree
 	builder()
+
+	return top
