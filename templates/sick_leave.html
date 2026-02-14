@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% block title %}Sick Leave - Leave Tracker{% endblock %}
+{% block content %}
+<h1>Sick Leave Records</h1>
+
+<div class="card">
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>First Name</th>
+                <th>Days</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Comment</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for rec in records %}
+            <tr class="{{ 'even-row' if loop.index % 2 == 0 else 'odd-row' }}">
+                <td>{{ rec.ID }}</td>
+                <td>{{ rec.firstName }}</td>
+                <td>{{ rec.leaveTaken }}</td>
+                <td>{{ rec.leaveStart }}</td>
+                <td>{{ rec.leaveEnd }}</td>
+                <td>{{ rec.comment }}</td>
+                <td class="actions">
+                    <button class="btn btn-sm btn-edit" onclick="fillLeaveForm('{{ rec.rowid }}', '{{ rec.ID }}', '{{ rec.firstName }}', '{{ rec.leaveTaken }}', '{{ rec.leaveStart }}', '{{ rec.leaveEnd }}', '{{ rec.comment|replace("'", "\\'") }}')">Edit</button>
+                    <form method="POST" action="{{ url_for('delete_sick_leave') }}" style="display:inline;" onsubmit="return confirm('Delete this leave record?');">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <input type="hidden" name="rowid" value="{{ rec.rowid }}">
+                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+            {% if not records %}
+            <tr><td colspan="7" class="text-center">No sick leave records.</td></tr>
+            {% endif %}
+        </tbody>
+    </table>
+</div>
+
+<div class="card" id="edit-card" style="display:none;">
+    <h3>Edit Sick Leave</h3>
+    <form method="POST" action="{{ url_for('update_sick_leave') }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <input type="hidden" id="edit-rowid" name="rowid">
+        <div class="form-row">
+            <div class="form-group">
+                <label>ID</label>
+                <input type="text" id="edit-id" readonly class="readonly">
+            </div>
+            <div class="form-group">
+                <label>First Name</label>
+                <input type="text" id="edit-fname" readonly class="readonly">
+            </div>
+            <div class="form-group">
+                <label for="edit-days">Days</label>
+                <input type="number" id="edit-days" name="days" required>
+            </div>
+            <div class="form-group">
+                <label for="edit-start">Start Date</label>
+                <input type="text" id="edit-start" name="startDate" required>
+            </div>
+            <div class="form-group">
+                <label for="edit-end">End Date</label>
+                <input type="text" id="edit-end" name="endDate" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="edit-comment">Comment</label>
+            <textarea id="edit-comment" name="comment" rows="3"></textarea>
+        </div>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Update</button>
+            <button type="button" class="btn btn-secondary" onclick="document.getElementById('edit-card').style.display='none'">Cancel</button>
+        </div>
+    </form>
+</div>
+
+<script>
+function fillLeaveForm(rowid, id, fname, days, start, end, comment) {
+    document.getElementById('edit-card').style.display = 'block';
+    document.getElementById('edit-rowid').value = rowid;
+    document.getElementById('edit-id').value = id;
+    document.getElementById('edit-fname').value = fname;
+    document.getElementById('edit-days').value = days;
+    document.getElementById('edit-start').value = start;
+    document.getElementById('edit-end').value = end;
+    document.getElementById('edit-comment').value = comment;
+    document.getElementById('edit-card').scrollIntoView({behavior: 'smooth'});
+}
+</script>
+{% endblock %}

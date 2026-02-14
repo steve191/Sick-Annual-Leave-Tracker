@@ -8,3 +8,7 @@
 /exe
 /Employee Backups
 /rates.xlsx
+/uploads/
+/backups/
+*.pyc
+.env

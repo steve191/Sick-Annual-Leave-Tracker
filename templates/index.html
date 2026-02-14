@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% block title %}Employees - Leave Tracker{% endblock %}
+{% block content %}
+<h1>Employees</h1>
+
+<div class="card">
+    <h3>Employee List</h3>
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Start Date</th>
+                <th>Leave Available</th>
+                <th>Sick Leave Available</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for emp in employees %}
+            <tr class="{{ 'even-row' if loop.index % 2 == 0 else 'odd-row' }}">
+                <td>{{ emp.ID }}</td>
+                <td>{{ emp.firstName }}</td>
+                <td>{{ emp.lastName }}</td>
+                <td>{{ emp.startDate }}</td>
+                <td>{{ emp.leaveAvailable }}</td>
+                <td>{{ emp.sickLeaveAvailable }}</td>
+                <td class="actions">
+                    <button class="btn btn-sm btn-edit" onclick="fillForm('{{ emp.ID }}', '{{ emp.firstName }}', '{{ emp.lastName }}', '{{ emp.startDate }}')">Edit</button>
+                    <a href="{{ url_for('add_annual_leave', id=emp.ID) }}" class="btn btn-sm btn-info">+Annual</a>
+                    <a href="{{ url_for('add_sick_leave', id=emp.ID) }}" class="btn btn-sm btn-warning">+Sick</a>
+                    <form method="POST" action="{{ url_for('delete_employee') }}" style="display:inline;" onsubmit="return confirm('Delete this employee? A backup will be created.');">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <input type="hidden" name="id" value="{{ emp.ID }}">
+                        <input type="hidden" name="firstName" value="{{ emp.firstName }}">
+                        <input type="hidden" name="lastName" value="{{ emp.lastName }}">
+                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+            {% if not employees %}
+            <tr><td colspan="7" class="text-center">No employees found. Add one below.</td></tr>
+            {% endif %}
+        </tbody>
+    </table>
+</div>
+
+<div class="card">
+    <h3 id="form-title">Add Employee</h3>
+    <form id="employee-form" method="POST" action="{{ url_for('add_employee') }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <div class="form-row">
+            <div class="form-group">
+                <label for="id">ID</label>
+                <input type="text" id="id" name="id" required>
+            </div>
+            <div class="form-group">
+                <label for="firstName">First Name</label>
+                <input type="text" id="firstName" name="firstName" required>
+            </div>
+            <div class="form-group">
+                <label for="lastName">Last Name</label>
+                <input type="text" id="lastName" name="lastName" required>
+            </div>
+            <div class="form-group">
+                <label for="startDate">Start Date (DD/MM/YYYY)</label>
+                <input type="text" id="startDate" name="startDate" required placeholder="DD/MM/YYYY">
+            </div>
+        </div>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary" id="submit-btn">Add Employee</button>
+            <button type="button" class="btn btn-secondary" onclick="resetForm()">Clear</button>
+        </div>
+    </form>
+</div>
+
+<script>
+function fillForm(id, fname, lname, start) {
+    document.getElementById('id').value = id;
+    document.getElementById('id').readOnly = true;
+    document.getElementById('firstName').value = fname;
+    document.getElementById('lastName').value = lname;
+    document.getElementById('startDate').value = start;
+    document.getElementById('form-title').textContent = 'Update Employee';
+    document.getElementById('submit-btn').textContent = 'Update Employee';
+    document.getElementById('employee-form').action = '{{ url_for("update_employee") }}';
+}
+
+function resetForm() {
+    document.getElementById('employee-form').reset();
+    document.getElementById('id').readOnly = false;
+    document.getElementById('form-title').textContent = 'Add Employee';
+    document.getElementById('submit-btn').textContent = 'Add Employee';
+    document.getElementById('employee-form').action = '{{ url_for("add_employee") }}';
+}
+</script>
+{% endblock %}

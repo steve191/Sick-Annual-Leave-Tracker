@@ -1,26 +1,40 @@
 # Sick & Annual Leave Tracker
 
 ## Overview
-A Python desktop (tkinter) application for tracking employee sick leave and annual leave. Forked from [steve191/Sick-Annual-Leave-Tracker](https://github.com/steve191/Sick-Annual-Leave-Tracker).
+A Flask web application for tracking employee sick leave and annual leave. Re-engineered from a tkinter desktop app, originally forked from [steve191/Sick-Annual-Leave-Tracker](https://github.com/steve191/Sick-Annual-Leave-Tracker).
 
 ## Current State
-- Application imported and running via VNC output
-- Uses SQLite database (created automatically by database.py)
+- Web application running on Flask (port 5000)
+- Uses SQLite database (employeeLeave.db)
+- Admin authentication with forced password change on first login
+- Install script generates random admin credentials
 
 ## Project Architecture
-- **main.py** - Entry point, main GUI window with employee table and action buttons
-- **database.py** - SQLite database operations (CRUD for employees, leave records)
-- **annual_leave.py** - Annual leave management UI
-- **sick_leave.py** - Sick leave management UI
-- **view_leave.py** - View all leave records, export to Excel
-- **med_docs.py** - Medical document folder management
-- **backup.py** - Employee data backup on deletion
+- **app.py** - Flask web application, routes, and request handlers
+- **db.py** - SQLite database operations (CRUD for employees, leave records, auth)
+- **install.py** - Installation script that sets up DB and creates admin user
+- **templates/** - Jinja2 HTML templates (base, login, employees, leave, documents)
+- **static/style.css** - Application styling
+- **uploads/** - Medical document storage (per-employee folders)
+- **backups/** - Employee backup data on deletion
+
+### Legacy Files (original tkinter app, kept for reference)
+- main.py, database.py, annual_leave.py, sick_leave.py, view_leave.py, med_docs.py, backup.py
 
 ## Dependencies
-- Python 3.11 (Full, with tkinter)
-- tkcalendar - Calendar widget for date selection
-- python-dateutil - Date utilities
-- openpyxl - Excel file read/write
+- Python 3.11
+- Flask - Web framework
+- Werkzeug - Password hashing and utilities
+- python-dateutil - Date parsing
+- openpyxl - Excel file generation
 
 ## How to Run
-The app runs as a desktop GUI via VNC workflow: `python main.py`
+1. Run `python install.py` to initialize the database and create admin credentials
+2. Run `python app.py` to start the web server on port 5000
+3. Login with the credentials shown during install
+4. Change password on first login (required)
+
+## User Preferences
+- Local SQLite database (no external DB services)
+- Admin authentication required
+- Web-based UI for local hosting

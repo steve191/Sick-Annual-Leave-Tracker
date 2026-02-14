@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Documents - Leave Tracker{% endblock %}
+{% block content %}
+<h1>Medical Documents</h1>
+
+<div class="card">
+    {% if folders %}
+    <div class="folder-grid">
+        {% for folder in folders %}
+        <a href="{{ url_for('view_folder', folder=folder) }}" class="folder-item">
+            <div class="folder-icon">&#128193;</div>
+            <div class="folder-name">{{ folder }}</div>
+        </a>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p class="text-center">No document folders yet. Folders are created automatically when employees are added.</p>
+    {% endif %}
+</div>
+{% endblock %}
