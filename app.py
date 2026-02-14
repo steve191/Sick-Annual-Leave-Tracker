@@ -15,6 +15,33 @@ app.config['WTF_CSRF_SSL_STRICT'] = False
 app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
 csrf = CSRFProtect(app)
 
+import re
+
+def validate_password(password):
+    errors = []
+    if len(password) < 14:
+        errors.append("Password must be at least 14 characters long.")
+    if not re.search(r'[A-Z]', password):
+        errors.append("Password must contain at least one uppercase letter.")
+    if not re.search(r'[a-z]', password):
+        errors.append("Password must contain at least one lowercase letter.")
+    if not re.search(r'[0-9]', password):
+        errors.append("Password must contain at least one number.")
+    if not re.search(r'[^A-Za-z0-9]', password):
+        errors.append("Password must contain at least one special character.")
+    return errors
+
+def admin_required(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        if 'username' not in session:
+            return redirect(url_for('login'))
+        if not db.is_admin(session['username']):
+            flash('Admin access required.', 'error')
+            return redirect(url_for('index'))
+        return f(*args, **kwargs)
+    return decorated
+
 def safe_sheet_name(name, emp_id, used_names):
     base = f"{name} ({emp_id})"[:31]
     if base in used_names:
@@ -55,6 +82,7 @@ def login():
         user = db.verify_password(username, password)
         if user:
             session['username'] = username
+            session['is_admin'] = bool(user['is_admin'])
             if user['force_password_change']:
                 return redirect(url_for('change_password'))
             return redirect(url_for('index'))
@@ -73,8 +101,10 @@ def change_password():
     if request.method == 'POST':
         new_password = request.form.get('new_password', '')
         confirm_password = request.form.get('confirm_password', '')
-        if len(new_password) < 6:
-            flash('Password must be at least 6 characters.', 'error')
+        pw_errors = validate_password(new_password)
+        if pw_errors:
+            for err in pw_errors:
+                flash(err, 'error')
         elif new_password != confirm_password:
             flash('Passwords do not match.', 'error')
         else:
@@ -465,6 +495,66 @@ def backup_employee(emp_id, fname, sname):
     if os.path.exists(src):
         shutil.copytree(src, backup_dir, dirs_exist_ok=True)
         shutil.rmtree(src, ignore_errors=True)
+
+@app.route('/users')
+@login_required
+@admin_required
+def manage_users():
+    users = db.get_all_users()
+    return render_template('users.html', users=users)
+
+@app.route('/users/add', methods=['POST'])
+@login_required
+@admin_required
+def add_user():
+    username = request.form.get('username', '').strip().lower()
+    password = request.form.get('password', '')
+    is_admin = 1 if request.form.get('is_admin') else 0
+
+    if not username:
+        flash('Username is required.', 'error')
+        return redirect(url_for('manage_users'))
+
+    pw_errors = validate_password(password)
+    if pw_errors:
+        for err in pw_errors:
+            flash(err, 'error')
+        return redirect(url_for('manage_users'))
+
+    if db.create_user(username, password, is_admin):
+        flash(f'User "{username}" created. They must change their password on first login.', 'success')
+    else:
+        flash(f'Username "{username}" already exists.', 'error')
+    return redirect(url_for('manage_users'))
+
+@app.route('/users/delete', methods=['POST'])
+@login_required
+@admin_required
+def delete_user():
+    user_id = request.form.get('user_id')
+    try:
+        db.delete_user(user_id)
+        flash('User deleted.', 'success')
+    except ValueError as e:
+        flash(str(e), 'error')
+    return redirect(url_for('manage_users'))
+
+@app.route('/users/reset-password', methods=['POST'])
+@login_required
+@admin_required
+def reset_user_password():
+    user_id = request.form.get('user_id')
+    new_password = request.form.get('new_password', '')
+
+    pw_errors = validate_password(new_password)
+    if pw_errors:
+        for err in pw_errors:
+            flash(err, 'error')
+        return redirect(url_for('manage_users'))
+
+    db.reset_user_password(user_id, new_password)
+    flash('Password reset. User must change it on next login.', 'success')
+    return redirect(url_for('manage_users'))
 
 if __name__ == '__main__':
     db.init_db()

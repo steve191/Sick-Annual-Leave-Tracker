@@ -273,6 +273,13 @@ h1 {
     word-break: break-word;
 }
 
+.password-hint {
+    display: block;
+    margin-top: 0.3rem;
+    font-size: 0.8rem;
+    color: #666;
+}
+
 @media (max-width: 768px) {
     .navbar {
         flex-direction: column;

@@ -3,14 +3,15 @@ import string
 import secrets
 import db
 
-def generate_password(length=12):
+def generate_password(length=16):
     chars = string.ascii_letters + string.digits + string.punctuation
     while True:
         password = ''.join(secrets.choice(chars) for _ in range(length))
         has_upper = any(c.isupper() for c in password)
         has_lower = any(c.islower() for c in password)
         has_digit = any(c.isdigit() for c in password)
-        if has_upper and has_lower and has_digit:
+        has_special = any(c in string.punctuation for c in password)
+        if has_upper and has_lower and has_digit and has_special and len(password) >= 14:
             return password
 
 def main():

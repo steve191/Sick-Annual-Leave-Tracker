@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% block title %}User Management - Leave Tracker{% endblock %}
+{% block content %}
+<h1>User Management</h1>
+
+<div class="card">
+    <h3>All Users</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Role</th>
+                <th>Password Status</th>
+                <th>Created</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr class="{{ 'even-row' if loop.index % 2 == 0 else 'odd-row' }}">
+                <td>{{ user.username }}</td>
+                <td>{{ 'Admin' if user.is_admin else 'User' }}</td>
+                <td>{{ 'Must change' if user.force_password_change else 'Set' }}</td>
+                <td>{{ user.created_at }}</td>
+                <td class="actions">
+                    <button class="btn btn-sm btn-warning" onclick="showResetForm('{{ user.id }}', '{{ user.username }}')">Reset Password</button>
+                    {% if user.username != 'admin' %}
+                    <form method="POST" action="{{ url_for('delete_user') }}" style="display:inline;" onsubmit="return confirm('Delete user {{ user.username }}?');">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <input type="hidden" name="user_id" value="{{ user.id }}">
+                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                    </form>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div class="card" id="reset-card" style="display:none;">
+    <h3 id="reset-title">Reset Password</h3>
+    <form method="POST" action="{{ url_for('reset_user_password') }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <input type="hidden" id="reset-user-id" name="user_id">
+        <div class="form-group">
+            <label for="reset-password">New Password</label>
+            <input type="password" id="reset-password" name="new_password" required minlength="14">
+            <small class="password-hint">Min 14 chars, must include uppercase, lowercase, number, and special character.</small>
+        </div>
+        <button type="submit" class="btn btn-primary">Reset Password</button>
+        <button type="button" class="btn btn-secondary" onclick="hideResetForm()">Cancel</button>
+    </form>
+</div>
+
+<div class="card">
+    <h3>Add New User</h3>
+    <form method="POST" action="{{ url_for('add_user') }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <div class="form-row">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Initial Password</label>
+                <input type="password" id="password" name="password" required minlength="14">
+            </div>
+            <div class="form-group" style="display:flex; align-items:center; gap:0.5rem; padding-top:1.5rem;">
+                <input type="checkbox" id="is_admin" name="is_admin" value="1">
+                <label for="is_admin" style="margin:0;">Admin</label>
+            </div>
+        </div>
+        <small class="password-hint">Min 14 chars, must include uppercase, lowercase, number, and special character. User will be forced to change password on first login.</small>
+        <br><br>
+        <button type="submit" class="btn btn-primary">Add User</button>
+    </form>
+</div>
+
+<script>
+function showResetForm(userId, username) {
+    document.getElementById('reset-card').style.display = 'block';
+    document.getElementById('reset-user-id').value = userId;
+    document.getElementById('reset-title').textContent = 'Reset Password for ' + username;
+    document.getElementById('reset-password').value = '';
+    document.getElementById('reset-card').scrollIntoView({behavior: 'smooth'});
+}
+function hideResetForm() {
+    document.getElementById('reset-card').style.display = 'none';
+}
+</script>
+{% endblock %}

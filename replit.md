@@ -6,14 +6,18 @@ A Flask web application for tracking employee sick leave and annual leave. Re-en
 ## Current State
 - Web application running on Flask (port 5000)
 - Uses SQLite database (employeeLeave.db)
-- Admin authentication with forced password change on first login
+- Multi-user authentication with admin and regular user roles
+- Admin can add/delete users and reset passwords
+- All users forced to change password on first login
+- Complex password policy: min 14 chars, uppercase, lowercase, number, special character
 - Install script generates random admin credentials
+- CSRF protection on all forms
 
 ## Project Architecture
 - **app.py** - Flask web application, routes, and request handlers
-- **db.py** - SQLite database operations (CRUD for employees, leave records, auth)
+- **db.py** - SQLite database operations (CRUD for employees, leave records, auth, user management)
 - **install.py** - Installation script that sets up DB and creates admin user
-- **templates/** - Jinja2 HTML templates (base, login, employees, leave, documents)
+- **templates/** - Jinja2 HTML templates (base, login, employees, leave, documents, users)
 - **static/style.css** - Application styling
 - **uploads/** - Medical document storage (per-employee folders)
 - **backups/** - Employee backup data on deletion

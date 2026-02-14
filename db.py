@@ -48,8 +48,16 @@ def init_db():
         username TEXT UNIQUE NOT NULL,
         password_hash TEXT NOT NULL,
         force_password_change INTEGER DEFAULT 1,
+        is_admin INTEGER DEFAULT 0,
         created_at TEXT DEFAULT CURRENT_TIMESTAMP
     )''')
+
+    try:
+        c.execute("ALTER TABLE users ADD COLUMN is_admin INTEGER DEFAULT 0")
+        con.commit()
+        c.execute("UPDATE users SET is_admin = 1 WHERE username = 'admin'")
+    except sqlite3.OperationalError:
+        pass
 
     con.commit()
     con.close()
@@ -59,13 +67,64 @@ def create_admin_user(password):
     c = con.cursor()
     pw_hash = generate_password_hash(password)
     try:
-        c.execute("INSERT INTO users (username, password_hash, force_password_change) VALUES (?, ?, 1)",
+        c.execute("INSERT INTO users (username, password_hash, force_password_change, is_admin) VALUES (?, ?, 1, 1)",
                   ('admin', pw_hash))
         con.commit()
     except sqlite3.IntegrityError:
         pass
     finally:
         con.close()
+
+def create_user(username, password, is_admin=0):
+    con = get_connection()
+    c = con.cursor()
+    pw_hash = generate_password_hash(password)
+    try:
+        c.execute("INSERT INTO users (username, password_hash, force_password_change, is_admin) VALUES (?, ?, 1, ?)",
+                  (username.strip().lower(), pw_hash, is_admin))
+        con.commit()
+        return True
+    except sqlite3.IntegrityError:
+        return False
+    finally:
+        con.close()
+
+def get_all_users():
+    con = get_connection()
+    c = con.cursor()
+    c.execute("SELECT id, username, is_admin, force_password_change, created_at FROM users ORDER BY username")
+    rows = c.fetchall()
+    con.close()
+    return [dict(r) for r in rows]
+
+def delete_user(user_id):
+    con = get_connection()
+    c = con.cursor()
+    c.execute("SELECT username FROM users WHERE id = ?", (user_id,))
+    user = c.fetchone()
+    if user and user['username'] == 'admin':
+        con.close()
+        raise ValueError("Cannot delete the primary admin account.")
+    c.execute("DELETE FROM users WHERE id = ?", (user_id,))
+    con.commit()
+    con.close()
+
+def reset_user_password(user_id, new_password):
+    con = get_connection()
+    c = con.cursor()
+    pw_hash = generate_password_hash(new_password)
+    c.execute("UPDATE users SET password_hash = ?, force_password_change = 1 WHERE id = ?",
+              (pw_hash, user_id))
+    con.commit()
+    con.close()
+
+def is_admin(username):
+    con = get_connection()
+    c = con.cursor()
+    c.execute("SELECT is_admin FROM users WHERE username = ?", (username,))
+    user = c.fetchone()
+    con.close()
+    return user and user['is_admin'] == 1
 
 def get_user(username):
     con = get_connection()
