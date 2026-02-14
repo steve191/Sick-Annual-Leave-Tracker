@@ -1,7 +1,17 @@
 #!/usr/bin/env python3
+import subprocess
+import sys
 import string
 import secrets
-import db
+import os
+
+def install_dependencies():
+    req_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'requirements.txt')
+    if os.path.exists(req_file):
+        subprocess.check_call([sys.executable, '-m', 'pip', 'install', '-r', req_file])
+    else:
+        subprocess.check_call([sys.executable, '-m', 'pip', 'install',
+                               'flask', 'flask-wtf', 'werkzeug', 'python-dateutil', 'openpyxl'])
 
 def generate_password(length=16):
     chars = string.ascii_letters + string.digits + string.punctuation
@@ -20,20 +30,32 @@ def main():
     print("=" * 50)
     print()
 
-    print("[1/2] Initializing database...")
+    print("[1/3] Installing dependencies...")
+    try:
+        install_dependencies()
+        print("      Dependencies installed successfully.")
+    except subprocess.CalledProcessError:
+        print("      ERROR: Failed to install dependencies.")
+        print("      Please run: pip install -r requirements.txt")
+        sys.exit(1)
+    print()
+
+    import db
+
+    print("[2/3] Initializing database...")
     db.init_db()
     print("      Database initialized successfully.")
     print()
 
     existing = db.get_user('admin')
     if existing:
-        print("[2/2] Admin user already exists.")
+        print("[3/3] Admin user already exists.")
         print("      If you need to reset the password, delete the")
         print("      database file and run this script again.")
     else:
         password = generate_password()
         db.create_admin_user(password)
-        print("[2/2] Admin user created.")
+        print("[3/3] Admin user created.")
         print()
         print("-" * 50)
         print("  ADMIN LOGIN CREDENTIALS")
