@@ -6,6 +6,14 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 DATABASE_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'employeeLeave.db')
 
+def parse_date(date_str):
+    for fmt in ("%d/%m/%Y", "%Y-%m-%d"):
+        try:
+            return datetime.strptime(date_str, fmt)
+        except (ValueError, TypeError):
+            continue
+    return parser.parse(date_str, dayfirst=True)
+
 def get_connection():
     con = sqlite3.connect(DATABASE_PATH)
     con.row_factory = sqlite3.Row
@@ -214,7 +222,7 @@ def get_employee_summary():
     for x in emp_rec:
         rec = [x['ID'], x['firstName'], x['lastName'], x['startDate']]
 
-        start_date = datetime.strptime(rec[3], "%d/%m/%Y")
+        start_date = parse_date(rec[3])
         end_date = datetime.strptime(date_now, "%d/%m/%Y")
 
         delta = relativedelta.relativedelta(end_date, start_date)
@@ -243,7 +251,7 @@ def get_employee_summary():
         for leave in sick_taken:
             if rec[0] == leave['ID']:
                 try:
-                    format_date = datetime.strptime(leave['leaveStart'], "%d/%m/%Y").date()
+                    format_date = parse_date(leave['leaveStart']).date()
                     if start_cycle_date <= format_date <= end_cycle_date:
                         sick_leave_taken += leave['leaveTaken']
                 except (ValueError, TypeError):

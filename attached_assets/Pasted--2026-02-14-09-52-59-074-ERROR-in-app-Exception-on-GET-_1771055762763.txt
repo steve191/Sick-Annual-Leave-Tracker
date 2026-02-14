@@ -1,0 +1,56 @@
+[2026-02-14 09:52:59,074] ERROR in app: Exception on / [GET]
+Traceback (most recent call last):
+  File "C:\Users\Devon\AppData\Local\Programs\Python\Python314\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\Devon\AppData\Local\Programs\Python\Python314\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\Devon\AppData\Local\Programs\Python\Python314\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\Devon\AppData\Local\Programs\Python\Python314\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "D:\Downloads\Compressed\Sick-Annual-Leave-Tracker-main\app.py", line 74, in decorated
+    return f(*args, **kwargs)
+  File "D:\Downloads\Compressed\Sick-Annual-Leave-Tracker-main\app.py", line 119, in index
+    employees = db.get_employee_summary()
+  File "D:\Downloads\Compressed\Sick-Annual-Leave-Tracker-main\db.py", line 217, in get_employee_summary
+    start_date = datetime.strptime(rec[3], "%d/%m/%Y")
+  File "C:\Users\Devon\AppData\Local\Programs\Python\Python314\Lib\_strptime.py", line 815, in _strptime_datetime_datetime
+    tt, fraction, gmtoff_fraction = _strptime(data_string, format)
+                                    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Devon\AppData\Local\Programs\Python\Python314\Lib\_strptime.py", line 555, in _strptime
+    raise ValueError("time data %r does not match format %r" %
+                     (data_string, format))
+ValueError: time data '2025-01-05' does not match format '%d/%m/%Y'
+127.0.0.1 - - [14/Feb/2026 09:52:59] "GET / HTTP/1.1" 500 -
+127.0.0.1 - - [14/Feb/2026 09:53:06] "GET / HTTP/1.1" 302 -
+127.0.0.1 - - [14/Feb/2026 09:53:06] "GET /login HTTP/1.1" 200 -
+127.0.0.1 - - [14/Feb/2026 09:53:06] "GET /static/style.css HTTP/1.1" 200 -
+127.0.0.1 - - [14/Feb/2026 09:53:06] "GET /static/logo.png HTTP/1.1" 200 -
+127.0.0.1 - - [14/Feb/2026 09:53:06] "GET /favicon.ico HTTP/1.1" 404 -
+127.0.0.1 - - [14/Feb/2026 09:53:20] "POST /login HTTP/1.1" 302 -
+[2026-02-14 09:53:20,534] ERROR in app: Exception on / [GET]
+Traceback (most recent call last):
+  File "C:\Users\Devon\AppData\Local\Programs\Python\Python314\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\Devon\AppData\Local\Programs\Python\Python314\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\Devon\AppData\Local\Programs\Python\Python314\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\Devon\AppData\Local\Programs\Python\Python314\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "D:\Downloads\Compressed\Sick-Annual-Leave-Tracker-main\app.py", line 74, in decorated
+    return f(*args, **kwargs)
+  File "D:\Downloads\Compressed\Sick-Annual-Leave-Tracker-main\app.py", line 119, in index
+    employees = db.get_employee_summary()
+  File "D:\Downloads\Compressed\Sick-Annual-Leave-Tracker-main\db.py", line 217, in get_employee_summary
+    start_date = datetime.strptime(rec[3], "%d/%m/%Y")
+  File "C:\Users\Devon\AppData\Local\Programs\Python\Python314\Lib\_strptime.py", line 815, in _strptime_datetime_datetime
+    tt, fraction, gmtoff_fraction = _strptime(data_string, format)
+                                    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Devon\AppData\Local\Programs\Python\Python314\Lib\_strptime.py", line 555, in _strptime
+    raise ValueError("time data %r does not match format %r" %
+                     (data_string, format))
+ValueError: time data '2025-01-05' does not match format '%d/%m/%Y'
+127.0.0.1 - - [14/Feb/2026 09:53:20] "GET / HTTP/1.1" 500 -
