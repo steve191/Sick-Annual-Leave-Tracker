@@ -273,6 +273,19 @@ h1 {
     word-break: break-word;
 }
 
+.login-logo {
+    display: block;
+    margin: 0 auto 1rem;
+    max-width: 180px;
+    height: auto;
+}
+
+.nav-logo {
+    height: 32px;
+    vertical-align: middle;
+    margin-right: 0.5rem;
+}
+
 .password-hint {
     display: block;
     margin-top: 0.3rem;
