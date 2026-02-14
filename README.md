@@ -93,4 +93,4 @@ backups/            - Employee backup data on deletion
 
 ## Original Project
 
-Forked from [steve191/Sick-Annual-Leave-Tracker](https://github.com/steve191/Sick-Annual-Leave-Tracker) and re-engineered as a web application.
+Forked from [Devon-GS/Sick-Annual-Leave-Tracker](https://github.com/Devon-GS/Sick-Annual-Leave-Tracker) and re-engineered as a web application.

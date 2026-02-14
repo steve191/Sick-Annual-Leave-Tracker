@@ -1,7 +1,7 @@
 # Sick & Annual Leave Tracker
 
 ## Overview
-A Flask web application for tracking employee sick leave and annual leave, developed by SD Solutions. Re-engineered from a tkinter desktop app, originally forked from [steve191/Sick-Annual-Leave-Tracker](https://github.com/steve191/Sick-Annual-Leave-Tracker).
+A Flask web application for tracking employee sick leave and annual leave, developed by SD Solutions. Re-engineered from a tkinter desktop app, originally forked from [Devon-GS/Sick-Annual-Leave-Tracker](https://github.com/Devon-GS/Sick-Annual-Leave-Tracker).
 
 ## Current State
 - Web application running on Flask (port 5000)
