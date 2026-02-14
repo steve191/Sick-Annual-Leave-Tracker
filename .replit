@@ -4,4 +4,27 @@ expertMode = true
 
 [nix]
 channel = "stable-25_05"
-packages = ["xorg.libX11", "xorg.libXext", "xorg.libXrender", "xorg.libXft", "tk", "tcl"]
+packages = ["xorg.libX11", "xorg.libXext", "xorg.libXrender", "xorg.libXft", "tk", "tcl", "python311Full"]
+
+[workflows]
+runButton = "Project"
+
+[[workflows.workflow]]
+name = "Project"
+mode = "parallel"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Sick & Annual Leave Tracker"
+
+[[workflows.workflow]]
+name = "Sick & Annual Leave Tracker"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python main.py"
+
+[workflows.workflow.metadata]
+outputType = "vnc"
