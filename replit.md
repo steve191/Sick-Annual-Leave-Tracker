@@ -1,7 +1,7 @@
 # Sick & Annual Leave Tracker
 
 ## Overview
-A Flask web application for tracking employee sick leave and annual leave. Re-engineered from a tkinter desktop app, originally forked from [steve191/Sick-Annual-Leave-Tracker](https://github.com/steve191/Sick-Annual-Leave-Tracker).
+A Flask web application for tracking employee sick leave and annual leave, developed by SD Solutions. Re-engineered from a tkinter desktop app, originally forked from [steve191/Sick-Annual-Leave-Tracker](https://github.com/steve191/Sick-Annual-Leave-Tracker).
 
 ## Current State
 - Web application running on Flask (port 5000)
@@ -12,13 +12,18 @@ A Flask web application for tracking employee sick leave and annual leave. Re-en
 - Complex password policy: min 14 chars, uppercase, lowercase, number, special character
 - Install script generates random admin credentials
 - CSRF protection on all forms
+- SD Solutions branded logo on login page and navigation bar
+- Excel export for all leave data
+- Medical document upload and management per employee
+- Employee backup on deletion (data + documents)
 
 ## Project Architecture
 - **app.py** - Flask web application, routes, and request handlers
 - **db.py** - SQLite database operations (CRUD for employees, leave records, auth, user management)
-- **install.py** - Installation script that sets up DB and creates admin user
-- **templates/** - Jinja2 HTML templates (base, login, employees, leave, documents, users)
+- **install.py** - Installation script that sets up DB and creates admin user with random password
+- **templates/** - Jinja2 HTML templates (base, login, employees, leave, documents, users, change_password, add_leave, folder)
 - **static/style.css** - Application styling
+- **static/logo.png** - SD Solutions logo
 - **uploads/** - Medical document storage (per-employee folders)
 - **backups/** - Employee backup data on deletion
 
@@ -28,6 +33,7 @@ A Flask web application for tracking employee sick leave and annual leave. Re-en
 ## Dependencies
 - Python 3.11
 - Flask - Web framework
+- Flask-WTF - CSRF protection
 - Werkzeug - Password hashing and utilities
 - python-dateutil - Date parsing
 - openpyxl - Excel file generation
@@ -42,3 +48,4 @@ A Flask web application for tracking employee sick leave and annual leave. Re-en
 - Local SQLite database (no external DB services)
 - Admin authentication required
 - Web-based UI for local hosting
+- SD Solutions branding

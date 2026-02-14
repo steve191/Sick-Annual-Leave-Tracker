@@ -13,11 +13,11 @@ body {
 
 .navbar {
     background: #2c3e50;
-    padding: 0 2rem;
+    padding: 0.5rem 2rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 56px;
+    min-height: 56px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 

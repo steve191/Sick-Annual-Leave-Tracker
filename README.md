@@ -1,87 +1,96 @@
-Tracks leave and sick leave accumulated and taken by employee.
+# Sick & Annual Leave Tracker
 
-<!-- ### <ins>Fixed Issues</ins> -->
+A Flask web application for tracking employee sick leave and annual leave. Re-engineered from a tkinter desktop application.
 
-<!-- - [ Date ]      [ patch ]       - [ Fixed ]   -->
+Developed by **SD Solutions**.
 
-<!-- ### <ins>Currently Working On [patch]</ins> -->
+## Features
 
-<!-- - Issue 24 [New feature add company logo on payslips] -->
+- **Employee Management** - Add, update, and delete employees with automatic leave calculation
+- **Annual Leave Tracking** - Record and manage annual leave with start/end dates and comments
+- **Sick Leave Tracking** - Track sick leave within 36-month cycles with automatic balance calculation
+- **Medical Documents** - Upload, view, and manage medical certificates per employee
+- **Excel Export** - Export all leave data to formatted Excel spreadsheets
+- **Multi-User Authentication** - Admin and regular user roles with secure password management
+- **Employee Backups** - Automatic backup of employee data and documents on deletion
+- **CSRF Protection** - All forms protected against cross-site request forgery
 
-### <ins>Currently Working On</ins>
+## Security
 
-##### <ins>GUI</ins>
+- Complex password policy: minimum 14 characters, must include uppercase, lowercase, number, and special character
+- All new users forced to change password on first login
+- Session-based authentication with secure cookie handling
+- Parameterized SQL queries to prevent injection
+- CSRF protection on all forms
+- File uploads sanitized with secure filenames
 
-###### <ins>Employee Setup</ins>
-- ~Add employee~
-	- ~Sort date format~
+## Installation
 
-- ~Update emplyee~
-	- ~Move to main.py delete employee setup~
+### Prerequisites
 
-- ~Clear button~
+- Python 3.11+
 
-- Delete employee
-	- ~Add Delete button and function~
-	- ~When deleting employee make back up of leave acc and taken (excel)~
-	  ~also of med documents~
-	  ~also cascade deletion~
+### Setup
 
-###### <ins>Leave</ins>
+1. Run the install script to initialise the database and create the admin account:
 
-- ~Add annual leave~
-
-- ~Edit annual leave~
-
-- ~Delete annual leave~
-
-- ~Add sick leave~
-
-- ~Edit sick leave~
-
-- ~Show annual leave available in table~
-
-- ~Show sick leave available in table~
-
-- ~Show all leave and sick leave taken (excel)~
-
-- ~Store medical certifcates~
-
-###### <ins>Edits</ins>
- - ~Make option for comments on add leave and sick leave~
-
- - ~Add edit of comments to edit leave and sick leave~
-
- - ~Add notes next to leave in view all leave~
-
- - ~Long term employee gets 20day leave every 12 months (son)~
-
- - ~Add button that open excel sheet to save wages rates~
-
- - ~For sick leave for 6 months get earn 1 day for every 26 days worked (month)~
-
-### <ins>How to install</ins>
-
-Create environment:
-
-```python
-python -m venv <name>
+```bash
+python install.py
 ```
 
-Install poetry:
+The install script will:
+- Create the SQLite database (`employeeLeave.db`)
+- Set up all required tables
+- Generate a random secure admin password
+- Display the admin credentials on screen
 
-```python
-pip install poetry
-``` 
+**Important:** Save the admin password shown during installation. You will need it to log in.
 
-Install dependencies:
+2. Start the application:
 
-```python
-poetry install
+```bash
+python app.py
 ```
 
-Run Script [main.py]:
+3. Open your browser and navigate to `http://localhost:5000`
 
-```python
-python main.py
-``` 
+4. Log in with the admin credentials from step 1
+
+5. You will be prompted to change the password on first login
+
+## User Management
+
+- **Admin users** can add/delete users and reset passwords via the Users page
+- **Regular users** can manage employees, leave records, and documents
+- The primary admin account cannot be deleted
+
+## Dependencies
+
+- Flask - Web framework
+- Flask-WTF - CSRF protection
+- Werkzeug - Password hashing and security utilities
+- python-dateutil - Date parsing
+- openpyxl - Excel file generation
+
+## Project Structure
+
+```
+app.py              - Flask application and route handlers
+db.py               - SQLite database operations
+install.py          - Installation and setup script
+static/
+  style.css         - Application styling
+  logo.png          - SD Solutions logo
+templates/          - Jinja2 HTML templates
+uploads/            - Medical document storage (per-employee folders)
+backups/            - Employee backup data on deletion
+```
+
+## Leave Calculation
+
+- **Annual Leave**: Employees accrue 1.25 days per month of service
+- **Sick Leave**: 30 days per 36-month cycle. Employees in their first 6 months accrue 1 day per month
+
+## Original Project
+
+Forked from [steve191/Sick-Annual-Leave-Tracker](https://github.com/steve191/Sick-Annual-Leave-Tracker) and re-engineered as a web application.

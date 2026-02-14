@@ -404,8 +404,13 @@ def upload_document(folder):
 @app.route('/documents/<folder>/<filename>/download')
 @login_required
 def download_document(folder, filename):
-    folder_path = os.path.join(UPLOAD_FOLDER, secure_filename(folder))
-    return send_file(os.path.join(folder_path, secure_filename(filename)), as_attachment=True)
+    safe_folder = secure_filename(folder) if folder else ''
+    safe_file = secure_filename(filename) if filename else ''
+    if not safe_folder or not safe_file:
+        flash('Invalid file path.', 'error')
+        return redirect(url_for('documents'))
+    folder_path = os.path.join(UPLOAD_FOLDER, safe_folder)
+    return send_file(os.path.join(folder_path, safe_file), as_attachment=True)
 
 @app.route('/documents/<folder>/<filename>/delete', methods=['POST'])
 @login_required
