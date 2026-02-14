@@ -11,6 +11,8 @@ import db
 
 app = Flask(__name__)
 app.secret_key = os.environ.get('SESSION_SECRET', os.urandom(32))
+app.config['WTF_CSRF_SSL_STRICT'] = False
+app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
 csrf = CSRFProtect(app)
 
 def safe_sheet_name(name, emp_id, used_names):
