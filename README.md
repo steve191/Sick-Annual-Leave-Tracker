@@ -32,7 +32,13 @@ Developed by **SD Solutions**.
 
 ### Setup
 
-1. Run the install script to initialise the database and create the admin account:
+1. Install the required dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+2. Run the install script to initialise the database and create the admin account:
 
 ```bash
 python install.py

@@ -1,0 +1,5 @@
+flask
+flask-wtf
+werkzeug
+python-dateutil
+openpyxl
